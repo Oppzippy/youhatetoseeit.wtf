@@ -1,4 +1,5 @@
 import React from "react";
+import { graphql } from "gatsby";
 import styled from "styled-components";
 
 const Bar = styled.nav`
@@ -29,15 +30,15 @@ const BarSection = styled.section`
 `;
 
 class NavBar extends React.Component {
-  renderInternalLinks() {
-    let links = this.props.links.internal.map(link => {
+  renderInternalLinks(linkData) {
+    let links = linkData.map(link => {
       //return <Link to={link.to}>{link.text}</Link>
     });
     return <BarSection>{links}</BarSection>;
   }
 
-  renderExternalLinks() {
-    let links = this.props.links.external.map(link => {
+  renderExternalLinks(linkData) {
+    let links = linkData.map(link => {
       return (
         <a href={link.href} rel="noopener noreferrer" target="_blank">
           {link.text}
@@ -50,8 +51,8 @@ class NavBar extends React.Component {
   render() {
     return (
       <Bar className="navbar">
-        {this.renderInternalLinks()}
-        {this.renderExternalLinks()}
+        {this.renderInternalLinks(this.props.links.internal)}
+        {this.renderExternalLinks(this.props.links.external)}
       </Bar>
     );
   }

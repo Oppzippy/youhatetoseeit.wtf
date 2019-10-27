@@ -1,8 +1,40 @@
 module.exports = {
   siteMetadata: {
     title: `You Hate to See It`,
-    description: `World of Warcraft mythic raiding guild You Hate to See It on Illidan US.`,
-    author: `@gatsbyjs`,
+    description: `World of Warcraft mythic raiding guild on Illidan (US)`,
+    text: {
+      apply: `Apply Now`,
+      raidTimes: `Raid times: 9:30pm-12:30pm CST (server time) on Wednesday and Thursday`,
+    },
+    links: {
+      apply: "https://docs.google.com/forms/d/e/1FAIpQLSfvQmGjAEiFuBvi_W29CLIRftVVO81zG3yrebEnXdSHYSZrPw/viewform"
+    },
+    nav: {
+      internal: [
+        {
+          text: "Home",
+          to: "/",
+        },
+        {
+          text: "Our Raiders",
+          to: "/raiders",
+        },
+      ],
+      external: [
+        {
+          text: "Discord",
+          href: "https://discordapp.com/invite/6VaqFJw",
+        },
+        {
+          text: "WoWProgress",
+          href: "https://www.wowprogress.com/guild/us/illidan/You+Hate+to+See+It",
+        },
+        {
+          text: "Raider.IO",
+          href: "https://raider.io/guilds/us/illidan/You%20Hate%20to%20See%20It",
+        },
+      ],
+    },
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

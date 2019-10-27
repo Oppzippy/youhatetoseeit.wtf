@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import logo from "../images/logo.svg";
 
 class Logo extends React.Component {
   render() {
-    return (
-      <img src={this.props.src} alt="logo" className={this.props.className} />
-    );
+    return <img src={logo} alt="logo" className={this.props.className} />;
   }
 }
 

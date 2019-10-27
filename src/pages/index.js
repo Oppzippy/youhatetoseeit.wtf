@@ -1,9 +1,9 @@
 import React from "react";
+import { graphql } from "gatsby";
 import styled from "styled-components";
-import Layout from "../components/Layout.js";
+import VideoBackgroundLayout from "../components/VideoBackgroundLayout.js";
 import Logo from "../components/Logo.js";
 import Button from "../components/Button.js";
-import config from "../Config.json";
 
 const FlexContainer = styled.div`
   display: flex;
@@ -20,25 +20,51 @@ const Section = styled.section`
 
 class Index extends React.Component {
   render() {
-    console.log(config);
-    console.log("test");
+    const meta = this.props.data.site.siteMetadata;
     return (
-      <Layout>
+      <VideoBackgroundLayout nav={meta.nav}>
         <FlexContainer>
           <Section>
-            <Logo {...config.files.logo} />
+            <Logo />
           </Section>
           <Section>
-            <h2>{config.text.mainSubHeader}</h2>
-            <p>{config.text.raidTimes}</p>
+            <h2>{meta.description}</h2>
+            <p>{meta.text.raidTimes}</p>
           </Section>
           <Section>
-            <Button href={config.links.apply}>Apply Now</Button>
+            <Button href={meta.links.apply}>{meta.text.apply}</Button>
           </Section>
         </FlexContainer>
-      </Layout>
+      </VideoBackgroundLayout>
     );
   }
 }
 
 export default Index;
+
+export const query = graphql`
+  query {
+    site {
+      siteMetadata {
+        description
+        text {
+          raidTimes
+          apply
+        }
+        links {
+          apply
+        }
+        nav {
+          external {
+            href
+            text
+          }
+          internal {
+            text
+            to
+          }
+        }
+      }
+    }
+  }
+`;

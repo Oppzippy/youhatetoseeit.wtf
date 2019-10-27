@@ -2,4 +2,6 @@ root = true
 
 [*.{js,css,json}]
 indent_size = 2
-indent_type = tab
+indent_type = space
+
+[*.yml]
