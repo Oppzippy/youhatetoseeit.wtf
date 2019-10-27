@@ -1,21 +1,44 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from "react";
+import styled from "styled-components";
+import Layout from "../components/Layout.js";
+import Logo from "../components/Logo.js";
+import Button from "../components/Button.js";
+import config from "../Config.json";
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const Section = styled.section`
+  text-align: center;
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+`;
 
-export default IndexPage
+class Index extends React.Component {
+  render() {
+    console.log(config);
+    console.log("test");
+    return (
+      <Layout>
+        <FlexContainer>
+          <Section>
+            <Logo {...config.files.logo} />
+          </Section>
+          <Section>
+            <h2>{config.text.mainSubHeader}</h2>
+            <p>{config.text.raidTimes}</p>
+          </Section>
+          <Section>
+            <Button href={config.links.apply}>Apply Now</Button>
+          </Section>
+        </FlexContainer>
+      </Layout>
+    );
+  }
+}
+
+export default Index;
