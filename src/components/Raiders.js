@@ -8,17 +8,6 @@ const Background = styled.div`
   align-items: center;
   padding: 50px;
   height: 100vh;
-  background-color: var(--primary-color-dark);
-  @media screen and (max-width: 800px) {
-    margin-top: -50px;
-    padding-top: 100px;
-    background-image: linear-gradient(
-      to bottom,
-      transparent,
-      var(--primary-color-dark) 50px,
-      var(--primary-color-dark-2) 500px
-    );
-  }
 `;
 
 const Container = styled.section`

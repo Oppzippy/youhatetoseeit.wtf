@@ -1,9 +1,17 @@
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import VideoBackgroundLayout from "../components/VideoBackgroundLayout.js";
 import Logo from "../components/Logo.js";
 import Button from "../components/Button.js";
+import MainContentBox from "../components/MainContentBox.js";
+
+const FullscreenContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const FlexContainer = styled.div`
   display: flex;
@@ -44,20 +52,22 @@ class ApplyNow extends React.Component {
         `}
         render={data => {
           const meta = data.site.siteMetadata;
-          return <VideoBackgroundLayout>
-            <FlexContainer>
-              <Section>
-                <Logo />
-              </Section>
-              <Section>
-                <Subtitle>{meta.description}</Subtitle>
-                <p>{meta.text.raidTimes}</p>
-              </Section>
-              <Section>
-                <Button href={meta.links.apply}>{meta.text.apply}</Button>
-              </Section>
-            </FlexContainer>
-          </VideoBackgroundLayout>;
+          return <FullscreenContainer>
+            <MainContentBox>
+              <FlexContainer>
+                <Section>
+                  <Logo />
+                </Section>
+                <Section>
+                  <Subtitle>{meta.description}</Subtitle>
+                  <p>{meta.text.raidTimes}</p>
+                </Section>
+                <Section>
+                  <Button href={meta.links.apply}>{meta.text.apply}</Button>
+                </Section>
+              </FlexContainer>
+            </MainContentBox>
+          </FullscreenContainer>;
         }}
       />
     );
