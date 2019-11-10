@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const ContentBox = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 200px;
   min-height: 200px;
   background-color: var(--bg-color-dark-transparent);

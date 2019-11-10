@@ -4,11 +4,23 @@ import { StaticQuery, graphql } from "gatsby";
 import RaiderListing from "./RaiderListing.js";
 
 const RaiderGrid = styled.div`
-  width: 100%;
+  width: 75vw;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  column-gap: 6px;
+  column-gap: 1vw;
   row-gap: 6px;
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 class AllRaiders extends React.Component {

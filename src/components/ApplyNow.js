@@ -1,23 +1,10 @@
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import Logo from "../components/Logo.js";
-import Button from "../components/Button.js";
-import MainContentBox from "../components/MainContentBox.js";
-
-const FullscreenContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import Logo from "./Logo.js";
+import Button from "./Button.js";
+import MainContentBox from "./MainContentBox.js";
+import FullscreenContainer from "./FullscreenContainer.js";
 
 const Section = styled.section`
   text-align: center;
@@ -52,9 +39,9 @@ class ApplyNow extends React.Component {
         `}
         render={data => {
           const meta = data.site.siteMetadata;
-          return <FullscreenContainer>
-            <MainContentBox>
-              <FlexContainer>
+          return (
+            <FullscreenContainer>
+              <MainContentBox>
                 <Section>
                   <Logo />
                 </Section>
@@ -65,9 +52,9 @@ class ApplyNow extends React.Component {
                 <Section>
                   <Button href={meta.links.apply}>{meta.text.apply}</Button>
                 </Section>
-              </FlexContainer>
-            </MainContentBox>
-          </FullscreenContainer>;
+              </MainContentBox>
+            </FullscreenContainer>
+          );
         }}
       />
     );
