@@ -6,7 +6,7 @@ import MainContentBox from "./MainContentBox.js";
 
 const Heading = styled.h2`
   font-size: 1.6rem;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `;
 
 class Raiders extends React.Component {

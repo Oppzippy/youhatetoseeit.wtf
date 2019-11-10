@@ -28,7 +28,7 @@ module.exports = {
         },
         {
           id: 3,
-          name: `Raider`
+          name: `Raider`,
         },
         {
           id: 4,
@@ -51,13 +51,43 @@ module.exports = {
           name: `Initiate`,
         },
       ],
+      memberMetadata: [
+        {
+          name: `Oppyspark`,
+          links: [
+            {
+              type: `twitch`,
+              href: `https://www.twitch.tv/oppzippy`,
+            },
+          ],
+        },
+        {
+          name: `Coüch`,
+          links: [
+            {
+              type: `twitch`,
+              href: `https://www.twitch.tv/couchhxd`,
+            },
+          ],
+        },
+        {
+          name: `Theology`,
+          links: [
+            {
+              type: `twitch`,
+              href: `https://www.twitch.tv/theology`,
+            },
+          ],
+        },
+      ],
     },
     text: {
       apply: `Apply Now`,
       raidTimes: `Raid times: 9:30pm-12:30pm CST (server time) on Wednesday and Thursday`,
     },
     links: {
-      apply: "https://docs.google.com/forms/d/e/1FAIpQLSfvQmGjAEiFuBvi_W29CLIRftVVO81zG3yrebEnXdSHYSZrPw/viewform"
+      apply:
+        "https://docs.google.com/forms/d/e/1FAIpQLSfvQmGjAEiFuBvi_W29CLIRftVVO81zG3yrebEnXdSHYSZrPw/viewform",
     },
     nav: {
       internal: [
@@ -77,11 +107,13 @@ module.exports = {
         },
         {
           text: "WoWProgress",
-          href: "https://www.wowprogress.com/guild/us/illidan/You+Hate+to+See+It",
+          href:
+            "https://www.wowprogress.com/guild/us/illidan/You+Hate+to+See+It",
         },
         {
           text: "Raider.IO",
-          href: "https://raider.io/guilds/us/illidan/You%20Hate%20to%20See%20It",
+          href:
+            "https://raider.io/guilds/us/illidan/You%20Hate%20to%20See%20It",
         },
       ],
     },

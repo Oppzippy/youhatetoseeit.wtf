@@ -24,28 +24,26 @@ const RaiderGrid = styled.div`
 `;
 
 class AllRaiders extends React.Component {
-  renderRaiders(members, { ranks, raiderRanks }) {
-    const rankNames = Object.fromEntries(
-      ranks.map(rank => [rank.id, rank.name])
+  renderRaiders(members, { ranks, raiderRanks, memberMetadata }) {
+    // Arrays to objects for O(1) lookup
+    ranks = Object.fromEntries(ranks.map(rank => [rank.id, rank.name]));
+    memberMetadata = Object.fromEntries(
+      memberMetadata.map(meta => [meta.name, meta])
     );
-    const raiders = [];
-    members
+
+    const raiders = members
       .filter(member => {
+        // TODO see about moving this to the graphql query
         return raiderRanks.includes(member.rank);
       })
-      .sort((a, b) => {
-        // Order rank from gm to initiate. Sort by name for same rank.
-        return a.rank !== b.rank
-          ? a.rank > b.rank
-          : a.character.name > b.character.name;
-      })
-      .forEach(member => {
-        const memberRank = rankNames[member.rank];
-        raiders.push(
+      .map((member, i) => {
+        const memberRank = ranks[member.rank];
+        return (
           <RaiderListing
-            key={`${member.character.thumbnail}`} // will be unique so this works
+            key={i}
             rank={memberRank}
             character={member.character}
+            meta={memberMetadata[member.character.name]}
           />
         );
       });
@@ -66,11 +64,20 @@ class AllRaiders extends React.Component {
                       id
                       name
                     }
+                    memberMetadata {
+                      name
+                      links {
+                        type
+                        href
+                      }
+                    }
                   }
                 }
               }
             }
-            allGuildMember {
+            allGuildMember(
+              sort: { fields: [rank, character___name], order: ASC }
+            ) {
               nodes {
                 character {
                   name

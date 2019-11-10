@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { StaticQuery, graphql } from "gatsby";
 import wowIcon from "../images/wow-icon.svg";
+import twitchIcon from "../images/twitch-logo.svg";
 
 const RaiderBox = styled.div`
   position: relative;
@@ -49,7 +51,29 @@ const Icons = styled.div`
   }
 `;
 
+const linkIcons = {
+  twitch: twitchIcon,
+};
+
 class RaiderListing extends React.Component {
+  renderLinks(links) {
+    if (!links) {
+      return;
+    }
+    return links.map(link => {
+      const icon = linkIcons[link.type];
+      if (icon) {
+        return (
+          <a href={link.href} rel="noopener" target="_blank">
+            <img src={icon} alt={link.type} />
+          </a>
+        );
+      } else {
+        throw new Error(`Icon type ${link.type} does not exist.`);
+      }
+    });
+  }
+
   render() {
     const rank = this.props.rank;
     const { name, realm, thumbnail } = this.props.character;
@@ -66,9 +90,12 @@ class RaiderListing extends React.Component {
         <Icons>
           <a
             href={`https://worldofwarcraft.com/en-us/character/us/${realm}/${name}`}
+            rel="noopener"
+            target="_blank"
           >
             <img src={wowIcon} alt="armory" />
           </a>
+          {this.renderLinks(this.props.meta ? this.props.meta.links : null)}
         </Icons>
       </div>
     );
