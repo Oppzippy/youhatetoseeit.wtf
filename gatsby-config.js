@@ -11,6 +11,7 @@ module.exports = {
         0, // Guild Master
         1, // Officer
         3, // Raider
+        5, // Trial
       ],
       ranks: [
         {
@@ -28,6 +29,26 @@ module.exports = {
         {
           id: 3,
           name: `Raider`
+        },
+        {
+          id: 4,
+          name: `Veteran`,
+        },
+        {
+          id: 5,
+          name: `Trial`,
+        },
+        {
+          id: 6,
+          name: `Alt`,
+        },
+        {
+          id: 7,
+          name: `Member`,
+        },
+        {
+          id: 8,
+          name: `Initiate`,
         },
       ],
     },
