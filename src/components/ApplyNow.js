@@ -18,6 +18,10 @@ const Section = styled.section`
   }
 `;
 
+const Subtitle = styled.h3`
+  font-size: 1.37rem;
+`;
+
 class ApplyNow extends React.Component {
   render() {
     return (
@@ -46,7 +50,7 @@ class ApplyNow extends React.Component {
                 <Logo />
               </Section>
               <Section>
-                <h2>{meta.description}</h2>
+                <Subtitle>{meta.description}</Subtitle>
                 <p>{meta.text.raidTimes}</p>
               </Section>
               <Section>

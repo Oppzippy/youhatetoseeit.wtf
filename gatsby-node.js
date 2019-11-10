@@ -13,14 +13,14 @@ const blizzardjs = require("blizzard.js");
 require("dotenv").config();
 
 const blizzard = blizzardjs.initialize({
-  key: process.env.GATSBY_BLIZZARD_CLIENT_ID,
-  secret: process.env.GATSBY_BLIZZARD_CLIENT_SECRET,
+  key: process.env.BLIZZARD_CLIENT_ID,
+  secret: process.env.BLIZZARD_CLIENT_SECRET,
   origin: config.siteMetadata.guild.region,
   locale: config.siteMetadata.guild.locale,
 });
 
-exports.sourceNodes = async ({ boundActionCreators }) => {
-  const { createNode } = boundActionCreators;
+exports.sourceNodes = async ({ actions }) => {
+  const { createNode } = actions;
   const token = await blizzard.getApplicationToken();
   blizzard.defaults.token = token.data.access_token;
   const guild = await blizzard.wow.guild("members", {

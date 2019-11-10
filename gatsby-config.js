@@ -12,6 +12,24 @@ module.exports = {
         1, // Officer
         3, // Raider
       ],
+      ranks: [
+        {
+          id: 0,
+          name: `Guild Master`,
+        },
+        {
+          id: 1,
+          name: `Officer`,
+        },
+        {
+          id: 2,
+          name: `Officer Alt`,
+        },
+        {
+          id: 3,
+          name: `Raider`
+        },
+      ],
     },
     text: {
       apply: `Apply Now`,
@@ -58,18 +76,6 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/logo.png`, // This path is relative to the root of the site.
-      },
-    },
     `gatsby-plugin-styled-components`,
   ],
 };
