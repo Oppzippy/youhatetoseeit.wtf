@@ -64,7 +64,7 @@ class RaiderListing extends React.Component {
       const icon = linkIcons[link.type];
       if (icon) {
         return (
-          <a href={link.href} rel="noopener" target="_blank">
+          <a href={link.href} rel="noopener noreferrer" target="_blank">
             <img src={icon} alt={link.type} />
           </a>
         );
@@ -90,7 +90,7 @@ class RaiderListing extends React.Component {
         <Icons>
           <a
             href={`https://worldofwarcraft.com/en-us/character/us/${realm}/${name}`}
-            rel="noopener"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img src={wowIcon} alt="armory" />
