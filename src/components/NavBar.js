@@ -3,9 +3,6 @@ import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 
 const Bar = styled.nav`
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   width: 100%;
   background-color: var(--bg-color-dark);
