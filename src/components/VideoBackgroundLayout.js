@@ -1,19 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import "./Layout.css";
 import FullscreenVideoBackground from "./FullscreenVideoBackground.js";
-import NavBar from "./NavBar.js";
 import MainContentBox from "./MainContentBox.js";
 import video from "../videos/background.mp4";
 
-const Grid = styled.div`
-  width: 100vw;
+const FullscreenContainer = styled.div`
+  width: 100%;
   height: 100vh;
-  display: grid;
-  grid-template-rows: auto 10fr;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  justify-items: center;
 `;
 
 class VideoBackgroundLayout extends React.Component {
@@ -21,10 +18,9 @@ class VideoBackgroundLayout extends React.Component {
     return (
       <div>
         <FullscreenVideoBackground src={video} />
-        <Grid>
-          <NavBar links={this.props.nav} />
+        <FullscreenContainer>
           <MainContentBox>{this.props.children}</MainContentBox>
-        </Grid>
+        </FullscreenContainer>
       </div>
     );
   }

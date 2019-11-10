@@ -3,7 +3,7 @@ import styled from "styled-components";
 import VideoBackground from "./VideoBackground.js";
 
 const FullscreenBackground = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: absolute;
   top: 0;

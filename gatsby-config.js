@@ -2,6 +2,17 @@ module.exports = {
   siteMetadata: {
     title: `You Hate to See It`,
     description: `World of Warcraft mythic raiding guild on Illidan (US)`,
+    guild: {
+      name: `You Hate to See It`,
+      realm: `illidan`,
+      region: `us`,
+      locale: `en_US`,
+      raiderRanks: [
+        0, // Guild Master
+        1, // Officer
+        3, // Raider
+      ],
+    },
     text: {
       apply: `Apply Now`,
       raidTimes: `Raid times: 9:30pm-12:30pm CST (server time) on Wednesday and Thursday`,

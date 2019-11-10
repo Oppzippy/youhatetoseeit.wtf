@@ -1,8 +1,11 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 
 const Bar = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   width: 100%;
   background-color: var(--bg-color-dark);
@@ -10,6 +13,7 @@ const Bar = styled.nav`
   justify-content: space-between;
   @media (max-width: 600px) {
     flex-direction: column;
+    position: static;
   }
 `;
 
@@ -40,7 +44,7 @@ class NavBar extends React.Component {
   renderExternalLinks(linkData) {
     let links = linkData.map(link => {
       return (
-        <a href={link.href} rel="noopener noreferrer" target="_blank">
+        <a href={link.href} rel="noopener noreferrer" target="_blank" key={link.text}>
           {link.text}
         </a>
       );
@@ -50,10 +54,35 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Bar className="navbar">
-        {this.renderInternalLinks(this.props.links.internal)}
-        {this.renderExternalLinks(this.props.links.external)}
-      </Bar>
+      <StaticQuery
+        query={graphql`
+          query {
+            site {
+              siteMetadata {
+                nav {
+                  external {
+                    href
+                    text
+                  }
+                  internal {
+                    text
+                    to
+                  }
+                }
+              }
+            }
+          }
+        `}
+        render={data => {
+          const nav = data.site.siteMetadata.nav;
+          return (
+            <Bar className="navbar">
+              {this.renderInternalLinks(nav.internal)}
+              {this.renderExternalLinks(nav.external)}
+            </Bar>
+          );
+        }}
+      />
     );
   }
 }
