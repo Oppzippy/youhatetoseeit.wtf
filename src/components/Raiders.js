@@ -10,9 +10,13 @@ const Heading = styled.h2`
 `;
 
 class Raiders extends React.Component {
+  constructor(props) {
+    super(props);
+    this.container = React.createRef();
+  }
   render() {
     return (
-      <FullscreenContainer>
+      <FullscreenContainer ref={this.container}>
         <MainContentBox>
           <Heading>Raiders</Heading>
           <AllRaiders />

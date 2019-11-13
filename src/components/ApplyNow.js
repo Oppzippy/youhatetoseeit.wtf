@@ -18,6 +18,10 @@ const Subtitle = styled.h3`
 `;
 
 class ApplyNow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.container = React.createRef();
+  }
   render() {
     return (
       <StaticQuery
@@ -40,7 +44,7 @@ class ApplyNow extends React.Component {
         render={data => {
           const meta = data.site.siteMetadata;
           return (
-            <FullscreenContainer>
+            <FullscreenContainer ref={this.container}>
               <MainContentBox>
                 <Section>
                   <Logo />
