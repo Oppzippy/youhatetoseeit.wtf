@@ -45,6 +45,7 @@ const Icons = styled.div`
   & > a {
     display: block;
     width: 20%;
+    padding: 2%;
     & > img {
       width: 100%;
     }

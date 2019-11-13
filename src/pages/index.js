@@ -21,6 +21,9 @@ const SnapContainer = styled.div`
     scroll-snap-align: start;
     position: relative;
   }
+  @media screen and (max-width: 1400px) {
+    scroll-snap-type: none;
+  }
 `;
 
 class Index extends React.Component {

@@ -93,11 +93,7 @@ module.exports = {
       internal: [
         {
           text: "Home",
-          to: "/",
-        },
-        {
-          text: "Our Raiders",
-          to: "/raiders",
+          href: "#",
         },
       ],
       external: [

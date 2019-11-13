@@ -33,7 +33,11 @@ const BarSection = styled.section`
 class NavBar extends React.Component {
   renderInternalLinks(linkData) {
     let links = linkData.map(link => {
-      //return <Link to={link.to}>{link.text}</Link>
+      return (
+        <a href={link.href} key={link.text}>
+          {link.text}
+        </a>
+      );
     });
     return <BarSection>{links}</BarSection>;
   }
@@ -63,12 +67,12 @@ class NavBar extends React.Component {
               siteMetadata {
                 nav {
                   external {
-                    href
                     text
+                    href
                   }
                   internal {
                     text
-                    to
+                    href
                   }
                 }
               }
