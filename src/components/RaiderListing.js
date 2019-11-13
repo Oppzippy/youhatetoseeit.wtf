@@ -64,7 +64,12 @@ class RaiderListing extends React.Component {
       const icon = linkIcons[link.type];
       if (icon) {
         return (
-          <a href={link.href} rel="noopener noreferrer" target="_blank">
+          <a
+            href={link.href}
+            rel="noopener noreferrer"
+            target="_blank"
+            key={link.type}
+          >
             <img src={icon} alt={link.type} />
           </a>
         );
