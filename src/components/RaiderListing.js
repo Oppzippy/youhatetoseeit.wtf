@@ -44,8 +44,8 @@ const Icons = styled.div`
   display: flex;
   & > a {
     display: block;
-    width: 20%;
-    padding: 2%;
+    width: 25%;
+    padding: 2.5%;
     & > img {
       width: 100%;
     }
