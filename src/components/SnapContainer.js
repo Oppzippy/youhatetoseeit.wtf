@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { isEqual } from "lodash";
 
 const Container = styled.div`
   flex-grow: 1;
@@ -13,35 +14,55 @@ const Container = styled.div`
   }
 `;
 
+class SnapChild extends React.Component {
+  constructor(props) {
+    super(props);
+    this.childRef = React.createRef();
+  }
+
+  getDomNode() {
+    return this.childRef.current;
+  }
+
+  render() {
+    return (
+      <div ref={this.childRef} {...this.props}>
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
 class SnapContainer extends React.Component {
   state = {
     y: 0,
-    style: { scrollSnapType: " y mandatory" },
+    style: { scrollSnapType: "y mandatory" },
   };
+
   constructor(props) {
     super(props);
     this.container = React.createRef();
   }
+
+  getDomNode() {
+    return this.container.current;
+  }
+
   onScroll() {
-    // TODO fix this ref nonsense
-    // If more than one element is in view, enable scroll snapping
-    // this way scroll snapping doesn't mess with elements larger than the viewport height
-    const scrollY =
-      this.container.current.scrollTop + this.container.current.offsetTop;
+    const scrollY = this.getDomNode().scrollTop + this.getDomNode().offsetTop;
+    this.setState({ scrollY });
     const top = scrollY;
-    const bottom = top + this.container.current.offsetHeight;
+    const bottom = top + this.getDomNode().offsetHeight;
     const down = this.state.y < scrollY;
-    const inView = this.props.scrollElements.filter(ref => {
-      const dom = ref.current.container.current;
-      const elementTop = dom.offsetTop;
-      const elementBottom = elementTop + dom.offsetHeight;
+    const nodes = this.childRefs.map(child => child.getDomNode());
+    const inView = nodes.filter(node => {
+      const elementTop = node.offsetTop;
+      const elementBottom = elementTop + node.offsetHeight;
       return !(top >= elementBottom || bottom <= elementTop);
     });
-    console.log(bottom - top);
     if (
       inView.length === 0 ||
-      (inView.length === 1 &&
-        inView[0].current.container.current.offsetHeight > bottom - top)
+      (inView.length === 1 && inView[0].offsetHeight > bottom - top)
     ) {
       this.setState({
         style: { scrollSnapType: "none" },
@@ -51,21 +72,33 @@ class SnapContainer extends React.Component {
         style: { scrollSnapType: "y mandatory" },
       });
     }
-    this.setState({
-      scrollY,
-    });
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(this.state.style, nextState.style);
+  }
+
   render() {
+    this.childRefs = [];
+    const children = React.Children.map(this.props.children, child => {
+      return React.cloneElement(child, {
+        ref: el => {
+          if (el) {
+            this.childRefs.push(el);
+          }
+        },
+      });
+    });
     return (
       <Container
         style={this.state.style}
         onScroll={() => this.onScroll()}
         ref={this.container}
       >
-        {this.props.children}
+        {children}
       </Container>
     );
   }
 }
 
-export default SnapContainer;
+export { SnapContainer, SnapChild };

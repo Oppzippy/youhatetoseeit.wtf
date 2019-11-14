@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import AllRaiders from "./AllRaiders.js";
-import FullscreenContainer from "./FullscreenContainer.js";
 import MainContentBox from "./MainContentBox.js";
 
 const Heading = styled.h2`
@@ -10,18 +9,12 @@ const Heading = styled.h2`
 `;
 
 class Raiders extends React.Component {
-  constructor(props) {
-    super(props);
-    this.container = React.createRef();
-  }
   render() {
     return (
-      <FullscreenContainer ref={this.container}>
-        <MainContentBox>
-          <Heading>Raiders</Heading>
-          <AllRaiders />
-        </MainContentBox>
-      </FullscreenContainer>
+      <MainContentBox>
+        <Heading>Raiders</Heading>
+        <AllRaiders />
+      </MainContentBox>
     );
   }
 }

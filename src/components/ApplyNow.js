@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Logo from "./Logo.js";
 import Button from "./Button.js";
 import MainContentBox from "./MainContentBox.js";
-import FullscreenContainer from "./FullscreenContainer.js";
 
 const Section = styled.section`
   text-align: center;
@@ -18,10 +17,6 @@ const Subtitle = styled.h3`
 `;
 
 class ApplyNow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.container = React.createRef();
-  }
   render() {
     return (
       <StaticQuery
@@ -44,20 +39,18 @@ class ApplyNow extends React.Component {
         render={data => {
           const meta = data.site.siteMetadata;
           return (
-            <FullscreenContainer ref={this.container}>
-              <MainContentBox>
-                <Section>
-                  <Logo />
-                </Section>
-                <Section>
-                  <Subtitle>{meta.description}</Subtitle>
-                  <p>{meta.text.raidTimes}</p>
-                </Section>
-                <Section>
-                  <Button href={meta.links.apply}>{meta.text.apply}</Button>
-                </Section>
-              </MainContentBox>
-            </FullscreenContainer>
+            <MainContentBox>
+              <Section>
+                <Logo />
+              </Section>
+              <Section>
+                <Subtitle>{meta.description}</Subtitle>
+                <p>{meta.text.raidTimes}</p>
+              </Section>
+              <Section>
+                <Button href={meta.links.apply}>{meta.text.apply}</Button>
+              </Section>
+            </MainContentBox>
           );
         }}
       />
