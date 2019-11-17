@@ -83,7 +83,7 @@ class NavBar extends React.Component {
         render={data => {
           const nav = data.site.siteMetadata.nav;
           return (
-            <Bar className="navbar">
+            <Bar>
               {this.renderInternalLinks(nav.internal)}
               {this.renderExternalLinks(nav.external)}
             </Bar>
