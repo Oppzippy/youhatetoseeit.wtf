@@ -5,9 +5,6 @@ import { isEqual } from "lodash";
 const Container = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
-  & > * {
-    position: relative;
-  }
 `;
 
 class SnapChild extends React.Component {
