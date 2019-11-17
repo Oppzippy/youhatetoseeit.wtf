@@ -74,7 +74,6 @@ class NavBar extends React.Component {
                   }
                   internal {
                     text
-                    href
                   }
                 }
               }
