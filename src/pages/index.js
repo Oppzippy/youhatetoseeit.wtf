@@ -23,13 +23,20 @@ const Section = styled(SnapChild)`
 `;
 
 class Index extends React.Component {
+  state = {
+    scrollFunctions: [],
+  };
   render() {
     return (
       <>
         <FullscreenVideoBackground src={video} />
         <FullscreenContainer>
-          <NavBar />
-          <SnapContainer>
+          <NavBar scrollFunctions={this.state.scrollFunctions} />
+          <SnapContainer
+            setScrollFunctions={funcs =>
+              this.setState({ scrollFunctions: funcs })
+            }
+          >
             <Section>
               <ApplyNow ref={this.about} />
             </Section>

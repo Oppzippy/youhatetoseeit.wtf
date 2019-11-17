@@ -16,8 +16,10 @@ const Bar = styled.nav`
 
 const BarSection = styled.section`
   display: flex;
-  & > a {
+  & > a,
+  & > span {
     display: block;
+    cursor: pointer;
     text-decoration: none;
     color: inherit;
     padding: 0.8rem;
@@ -32,11 +34,11 @@ const BarSection = styled.section`
 
 class NavBar extends React.Component {
   renderInternalLinks(linkData) {
-    let links = linkData.map(link => {
+    let links = linkData.map((link, i) => {
       return (
-        <a href={link.href} key={link.text}>
+        <span onClick={this.props.scrollFunctions[i]} key={link.text}>
           {link.text}
-        </a>
+        </span>
       );
     });
     return <BarSection>{links}</BarSection>;

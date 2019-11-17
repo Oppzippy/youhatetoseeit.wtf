@@ -40,6 +40,16 @@ class SnapContainer extends React.Component {
     this.container = React.createRef();
   }
 
+  componentDidMount() {
+    if (this.props.setScrollFunctions) {
+      const scrollFunctions = this.childRefs.map(child => () =>
+        this.scrollTo(child.getDomNode())
+      );
+      this.props.setScrollFunctions(scrollFunctions);
+      console.log(scrollFunctions);
+    }
+  }
+
   getDomNode() {
     return this.container.current;
   }
@@ -71,7 +81,12 @@ class SnapContainer extends React.Component {
   }
 
   scrollTo(node) {
+    if (this.state.animationID) {
+      window.cancelAnimationFrame(this.state.animationID);
+      this.setState({ animationID: null });
+    }
     let startTime = null;
+    const startY = this.state.scrollY;
     const duration = this.props.duration || 500;
     const target = node.offsetTop - this.getDomNode().offsetTop;
     const step = timestamp => {
@@ -82,17 +97,17 @@ class SnapContainer extends React.Component {
       // smooth the animation
       const sinProgress = Math.sin((Math.PI / 2) * progress);
       // offset relative to starting position
-      const offset = (target - this.state.scrollY) * sinProgress;
+      const offset = (target - startY) * sinProgress;
       if (progress < 1) {
-        this.getDomNode().scrollTo(0, this.state.scrollY + offset);
-        window.requestAnimationFrame(step);
-      } else {
-        this.getDomNode().scrollTo(0, target);
-        // update state once at the end instead of at every step
+        this.getDomNode().scrollTo(0, startY + offset);
         this.setState({
-          scrolling: false,
+          animationID: window.requestAnimationFrame(step),
           scrollY: this.getDomNode().scrollTop,
         });
+      } else {
+        this.getDomNode().scrollTo(0, target);
+        this.setState({ scrolling: false });
+        this.animationID = null;
       }
     };
     window.requestAnimationFrame(step);
@@ -102,7 +117,8 @@ class SnapContainer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.state.style, nextState.style);
+    // Ignore state
+    return !isEqual(nextProps, this.props);
   }
 
   render() {

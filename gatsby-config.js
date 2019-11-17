@@ -92,8 +92,10 @@ module.exports = {
     nav: {
       internal: [
         {
-          text: "Home",
-          href: "#",
+          text: "About",
+        },
+        {
+          text: "Our Raiders",
         },
       ],
       external: [
