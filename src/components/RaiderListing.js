@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { StaticQuery, graphql } from "gatsby";
 import wowIcon from "../images/wow-icon.svg";
 import twitchIcon from "../images/twitch-logo.svg";
 

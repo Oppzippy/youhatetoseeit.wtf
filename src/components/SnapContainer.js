@@ -6,11 +6,7 @@ const Container = styled.div`
   flex-grow: 1;
   overflow-y: scroll;
   & > * {
-    scroll-snap-align: start;
     position: relative;
-  }
-  @media screen and (max-width: 2px) {
-    scroll-snap-type: none;
   }
 `;
 
@@ -35,8 +31,8 @@ class SnapChild extends React.Component {
 
 class SnapContainer extends React.Component {
   state = {
-    y: 0,
-    style: { scrollSnapType: "y mandatory" },
+    scrollY: 0,
+    scrolling: false,
   };
 
   constructor(props) {
@@ -49,29 +45,60 @@ class SnapContainer extends React.Component {
   }
 
   onScroll() {
-    const scrollY = this.getDomNode().scrollTop + this.getDomNode().offsetTop;
+    if (this.state.scrolling) {
+      return;
+    }
+    const scrollY = this.getDomNode().scrollTop;
     this.setState({ scrollY });
+    // Top and bottom of the visible scroll section
     const top = scrollY;
     const bottom = top + this.getDomNode().offsetHeight;
-    const down = this.state.y < scrollY;
+    const scrollingDown = this.state.scrollY > scrollY;
     const nodes = this.childRefs.map(child => child.getDomNode());
     const inView = nodes.filter(node => {
-      const elementTop = node.offsetTop;
+      // Account for offset of the container
+      const elementTop = node.offsetTop - this.getDomNode().offsetTop;
       const elementBottom = elementTop + node.offsetHeight;
       return !(top >= elementBottom || bottom <= elementTop);
     });
-    if (
-      inView.length === 0 ||
-      (inView.length === 1 && inView[0].offsetHeight > bottom - top)
-    ) {
-      this.setState({
-        style: { scrollSnapType: "none" },
+    if (inView.length > 1) {
+      const target = inView.reduce((acc, curr) => {
+        // highest node if we're scrolling up, or lowest if we're scrolling down
+        return scrollingDown ^ (acc.offsetTop > curr.offsetTop) ? acc : curr;
       });
-    } else {
-      this.setState({
-        style: { scrollSnapType: "y mandatory" },
-      });
+      this.scrollTo(target);
     }
+  }
+
+  scrollTo(node) {
+    let startTime = null;
+    const duration = this.props.duration || 500;
+    const target = node.offsetTop - this.getDomNode().offsetTop;
+    const step = timestamp => {
+      if (!startTime) {
+        startTime = timestamp;
+      }
+      const progress = (timestamp - startTime) / duration;
+      // smooth the animation
+      const sinProgress = Math.sin((Math.PI / 2) * progress);
+      // offset relative to starting position
+      const offset = (target - this.state.scrollY) * sinProgress;
+      if (progress < 1) {
+        this.getDomNode().scrollTo(0, this.state.scrollY + offset);
+        window.requestAnimationFrame(step);
+      } else {
+        this.getDomNode().scrollTo(0, target);
+        // update state once at the end instead of at every step
+        this.setState({
+          scrolling: false,
+          scrollY: this.getDomNode().scrollTop,
+        });
+      }
+    };
+    window.requestAnimationFrame(step);
+    this.setState({
+      scrolling: true,
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
