@@ -35,7 +35,7 @@ class SnapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    if (window) {
+    if (typeof window !== "undefined") {
       this.mediaQuery = window.matchMedia("(hover: none)");
     }
   }
