@@ -35,7 +35,9 @@ class SnapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    this.mediaQuery = window.matchMedia("(hover: none)");
+    if (window) {
+      this.mediaQuery = window.matchMedia("(hover: none)");
+    }
   }
 
   isScrollSnappingEnabled() {
