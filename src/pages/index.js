@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 import NavBar from "../components/NavBar.js";
 import ApplyNow from "../components/ApplyNow.js";
 import Raiders from "../components/Raiders.js";
 import { SnapContainer, SnapChild } from "../components/SnapContainer.js";
 import FullscreenVideoBackground from "../components/FullscreenVideoBackground.js";
+import favicon from "../images/favicon.ico";
 import video from "../videos/background.mp4";
 import "../components/Layout.css";
 
@@ -29,6 +31,14 @@ class Index extends React.Component {
   render() {
     return (
       <>
+        <Helmet>
+          <title>You Hate to See It</title>
+          <meta
+            name="description"
+            content="World of Warcraft mythic raiding guild on Illidan-US"
+          />
+          <link rel="icon" href={favicon} />
+        </Helmet>
         <FullscreenVideoBackground src={video} />
         <FullscreenContainer>
           <NavBar scrollFunctions={this.state.scrollFunctions} />
