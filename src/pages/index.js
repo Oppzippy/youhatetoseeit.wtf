@@ -18,7 +18,7 @@ const FullscreenContainer = styled.div`
 
 const Section = styled(SnapChild)`
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,6 +45,9 @@ class Index extends React.Component {
           <SnapContainer
             setScrollFunctions={funcs =>
               this.setState({ scrollFunctions: funcs })
+            }
+            parent={
+              typeof document !== "undefined" ? document.documentElement : null
             }
           >
             <Section>

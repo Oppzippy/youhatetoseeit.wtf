@@ -4,7 +4,7 @@ import { isEqual } from "lodash";
 
 const Container = styled.div`
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: ${props => (props.isScrollParent ? "scroll" : "initial")};
 `;
 
 class SnapChild extends React.Component {
@@ -50,31 +50,51 @@ class SnapContainer extends React.Component {
         this.scrollTo(child.getDomNode())
       );
       this.props.setScrollFunctions(scrollFunctions);
-      console.log(scrollFunctions);
     }
+    // documentElement holds the scroll position but does not fire scroll events.
+    // window does instead.
+    const scrollParent =
+      this.getScrollParent() === document.documentElement
+        ? window
+        : this.getScrollParent();
+    scrollParent.addEventListener("scroll", () => this.onScroll());
   }
 
   getDomNode() {
     return this.container.current;
   }
 
+  getScrollParent() {
+    return this.props.parent || this.container.current;
+  }
+
+  isNodeInView(node) {
+    const scrollParent = this.getScrollParent();
+
+    const top = scrollParent.scrollTop;
+    const bottom = top + scrollParent.offsetHeight;
+
+    const elementTop = node.offsetTop - scrollParent.offsetTop;
+    const elementBottom = elementTop + node.offsetHeight;
+    return !(top >= elementBottom || bottom <= elementTop);
+  }
+
+  getScrollDirection() {
+    const scrollY = this.getScrollParent().scrollTop;
+    const scrollingDown = this.state.scrollY > scrollY;
+    this.setState({ scrollY });
+    return scrollingDown;
+  }
+
   onScroll() {
+    console.log("scroll");
     if (this.state.scrolling || !this.isScrollSnappingEnabled()) {
       return;
     }
-    const scrollY = this.getDomNode().scrollTop;
-    this.setState({ scrollY });
-    // Top and bottom of the visible scroll section
-    const top = scrollY;
-    const bottom = top + this.getDomNode().offsetHeight;
-    const scrollingDown = this.state.scrollY > scrollY;
+    const scrollingDown = this.getScrollDirection();
+
     const nodes = this.childRefs.map(child => child.getDomNode());
-    const inView = nodes.filter(node => {
-      // Account for offset of the container
-      const elementTop = node.offsetTop - this.getDomNode().offsetTop;
-      const elementBottom = elementTop + node.offsetHeight;
-      return !(top >= elementBottom || bottom <= elementTop);
-    });
+    const inView = nodes.filter(node => this.isNodeInView(node));
     if (inView.length > 1) {
       const target = inView.reduce((acc, curr) => {
         // highest node if we're scrolling up, or lowest if we're scrolling down
@@ -92,24 +112,25 @@ class SnapContainer extends React.Component {
     let startTime = null;
     const startY = this.state.scrollY;
     const duration = this.props.duration || 500;
-    const target = node.offsetTop - this.getDomNode().offsetTop;
+    const target = node.offsetTop - this.getScrollParent().offsetTop;
     const step = timestamp => {
       if (!startTime) {
         startTime = timestamp;
       }
+      const scrollParent = this.getScrollParent();
       const progress = (timestamp - startTime) / duration;
       // smooth the animation
       const sinProgress = Math.sin((Math.PI / 2) * progress);
       // offset relative to starting position
       const offset = (target - startY) * sinProgress;
       if (progress < 1) {
-        this.getDomNode().scrollTo(0, startY + offset);
+        scrollParent.scrollTo(0, startY + offset);
         this.setState({
           animationID: window.requestAnimationFrame(step),
-          scrollY: this.getDomNode().scrollTop,
+          scrollY: scrollParent.scrollTop,
         });
       } else {
-        this.getDomNode().scrollTo(0, target);
+        scrollParent.scrollTo(0, target);
         this.setState({ scrolling: false });
         this.animationID = null;
       }
@@ -141,6 +162,7 @@ class SnapContainer extends React.Component {
         style={this.state.style}
         onScroll={() => this.onScroll()}
         ref={this.container}
+        isScrollParent={typeof this.props.parent === "undefined"}
       >
         {children}
       </Container>

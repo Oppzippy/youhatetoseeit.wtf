@@ -3,12 +3,14 @@ import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 
 const Bar = styled.nav`
+  position: fixed;
   display: flex;
   width: 100%;
   background-color: var(--bg-color-dark);
   padding: 0 8%;
   justify-content: space-between;
   @media (max-width: 600px) {
+    /* TODO improve UX on small screens */
     flex-direction: column;
     position: static;
   }
