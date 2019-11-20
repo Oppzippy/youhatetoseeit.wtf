@@ -38,6 +38,8 @@ class SnapContainer extends React.Component {
     if (typeof window !== "undefined") {
       this.mediaQuery = window.matchMedia("(hover: none)");
     }
+
+    this.onScroll = this.onScroll.bind(this);
   }
 
   isScrollSnappingEnabled() {
@@ -53,11 +55,12 @@ class SnapContainer extends React.Component {
     }
     // documentElement holds the scroll position but does not fire scroll events.
     // window does instead.
-    const scrollParent =
-      this.getScrollParent() === document.documentElement
-        ? window
-        : this.getScrollParent();
-    scrollParent.addEventListener("scroll", () => this.onScroll());
+
+    this.getEventListenerParent().addEventListener("scroll", this.onScroll);
+  }
+
+  componentDidUnmount() {
+    this.getEventListenerParent().removeEventListener("scroll", this.onScroll);
   }
 
   getDomNode() {
@@ -66,6 +69,12 @@ class SnapContainer extends React.Component {
 
   getScrollParent() {
     return this.props.parent || this.container.current;
+  }
+
+  getEventListenerParent() {
+    return this.getScrollParent() === document.documentElement
+      ? window
+      : this.getScrollParent();
   }
 
   isNodeInView(node) {
