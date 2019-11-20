@@ -53,9 +53,6 @@ class SnapContainer extends React.Component {
       );
       this.props.setScrollFunctions(scrollFunctions);
     }
-    // documentElement holds the scroll position but does not fire scroll events.
-    // window does instead.
-
     this.getEventListenerParent().addEventListener("scroll", this.onScroll);
   }
 
@@ -72,6 +69,8 @@ class SnapContainer extends React.Component {
   }
 
   getEventListenerParent() {
+    // documentElement holds the scroll position but does not fire scroll events.
+    // window does instead.
     return this.getScrollParent() === document.documentElement
       ? window
       : this.getScrollParent();
