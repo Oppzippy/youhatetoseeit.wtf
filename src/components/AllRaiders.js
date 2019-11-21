@@ -1,3 +1,4 @@
+import "../polyfill/object-fromEntries.js";
 import React from "react";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
@@ -23,8 +24,10 @@ const RaiderGrid = styled.div`
 class AllRaiders extends React.Component {
   renderRaiders(members, { ranks, raiderRanks, memberMetadata }) {
     // Arrays to objects for O(1) lookup
-    ranks = Object.fromEntries(ranks.map(rank => [rank.id, rank.name]));
-    memberMetadata = Object.fromEntries(
+    const ranksById = Object.fromEntries(
+      ranks.map(rank => [rank.id, rank.name])
+    );
+    const memberMetadataByName = Object.fromEntries(
       memberMetadata.map(meta => [meta.name, meta])
     );
 
@@ -34,13 +37,13 @@ class AllRaiders extends React.Component {
         return raiderRanks.includes(member.rank);
       })
       .map((member, i) => {
-        const memberRank = ranks[member.rank];
+        const memberRank = ranksById[member.rank];
         return (
           <RaiderListing
             key={i}
             rank={memberRank}
             character={member.character}
-            meta={memberMetadata[member.character.name]}
+            meta={memberMetadataByName[member.character.name]}
           />
         );
       });
