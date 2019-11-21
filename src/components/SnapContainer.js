@@ -95,7 +95,6 @@ class SnapContainer extends React.Component {
   }
 
   onScroll() {
-    console.log("scroll");
     if (this.state.scrolling || !this.isScrollSnappingEnabled()) {
       return;
     }
