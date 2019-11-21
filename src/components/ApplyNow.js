@@ -41,7 +41,9 @@ class ApplyNow extends React.Component {
           return (
             <MainContentBox>
               <Section>
-                <Logo />
+                <h1>
+                  <Logo />
+                </h1>
               </Section>
               <Section>
                 <Subtitle>{meta.description}</Subtitle>

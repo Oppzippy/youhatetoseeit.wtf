@@ -4,7 +4,13 @@ import logo from "../images/logo.svg";
 
 class Logo extends React.Component {
   render() {
-    return <img src={logo} alt="logo" className={this.props.className} />;
+    return (
+      <img
+        src={logo}
+        alt="You Hate to See It"
+        className={this.props.className}
+      />
+    );
   }
 }
 
