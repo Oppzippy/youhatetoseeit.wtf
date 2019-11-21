@@ -56,7 +56,7 @@ class SnapContainer extends React.Component {
     this.getEventListenerParent().addEventListener("scroll", this.onScroll);
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     this.getEventListenerParent().removeEventListener("scroll", this.onScroll);
   }
 
