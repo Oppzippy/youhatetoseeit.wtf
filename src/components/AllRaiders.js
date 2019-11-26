@@ -22,19 +22,19 @@ const RaiderGrid = styled.div`
 `;
 
 class AllRaiders extends React.Component {
-  renderRaiders(members, { ranks, raiderRanks, memberMetadata }) {
+  renderRaiders(members, raiderRanks, raiderMetadata) {
     // Arrays to objects for O(1) lookup
     const ranksById = Object.fromEntries(
-      ranks.map(rank => [rank.id, rank.name])
+      raiderRanks.map(rank => [rank.id, rank.name])
     );
-    const memberMetadataByName = Object.fromEntries(
-      memberMetadata.map(meta => [meta.name, meta])
+    const raiderMetadataByName = Object.fromEntries(
+      raiderMetadata.map(meta => [meta.name, meta])
     );
 
     const raiders = members
       .filter(member => {
         // TODO see about moving this to the graphql query
-        return raiderRanks.includes(member.rank);
+        return ranksById[member.rank];
       })
       .map((member, i) => {
         const memberRank = ranksById[member.rank];
@@ -43,7 +43,7 @@ class AllRaiders extends React.Component {
             key={i}
             rank={memberRank}
             character={member.character}
-            meta={memberMetadataByName[member.character.name]}
+            meta={raiderMetadataByName[member.character.name]}
           />
         );
       });
@@ -55,23 +55,30 @@ class AllRaiders extends React.Component {
       <StaticQuery
         query={graphql`
           query {
-            allSite {
+            allCockpitRaiders {
               nodes {
-                siteMetadata {
-                  guild {
-                    raiderRanks
-                    ranks {
-                      id
-                      name
+                rank {
+                  value {
+                    rank_id {
+                      value
                     }
-                    memberMetadata {
-                      name
-                      links {
-                        type
-                        href
-                      }
+                    name {
+                      value
                     }
                   }
+                }
+              }
+            }
+            allCockpitRaiderMeta {
+              nodes {
+                twitch {
+                  value
+                }
+                realm {
+                  value
+                }
+                name {
+                  value
                 }
               }
             }
@@ -91,11 +98,27 @@ class AllRaiders extends React.Component {
           }
         `}
         render={data => {
+          const raiderRanks = data.allCockpitRaiders.nodes.map(node => {
+            return {
+              id: node.rank.value.rank_id.value,
+              name: node.rank.value.name.value,
+            };
+          });
+
+          const raiderMeta = data.allCockpitRaiderMeta.nodes.map(node => {
+            return {
+              name: node.name.value,
+              realm: node.realm.value,
+              twitch: node.twitch.value,
+            };
+          });
+
           return (
             <RaiderGrid>
               {this.renderRaiders(
                 data.allGuildMember.nodes,
-                data.allSite.nodes[0].siteMetadata.guild
+                raiderRanks,
+                raiderMeta
               )}
             </RaiderGrid>
           );

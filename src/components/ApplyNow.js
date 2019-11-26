@@ -22,22 +22,24 @@ class ApplyNow extends React.Component {
       <StaticQuery
         query={graphql`
           query {
-            site {
-              siteMetadata {
-                description
-                text {
-                  raidTimes
-                  apply
-                }
-                links {
-                  apply
-                }
+            cockpitMain {
+              logo {
+                type
+              }
+              heading {
+                value
+              }
+              description {
+                value
+              }
+              apply_link {
+                value
               }
             }
           }
         `}
         render={data => {
-          const meta = data.site.siteMetadata;
+          const content = data.cockpitMain;
           return (
             <MainContentBox>
               <Section>
@@ -46,11 +48,11 @@ class ApplyNow extends React.Component {
                 </h1>
               </Section>
               <Section>
-                <Subtitle>{meta.description}</Subtitle>
-                <p>{meta.text.raidTimes}</p>
+                <Subtitle>{content.heading.value}</Subtitle>
+                <p>{content.description.value}</p>
               </Section>
               <Section>
-                <Button href={meta.links.apply}>{meta.text.apply}</Button>
+                <Button href={content.apply_link.value}>Apply Now</Button>
               </Section>
             </MainContentBox>
           );

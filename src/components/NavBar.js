@@ -67,27 +67,43 @@ class NavBar extends React.Component {
       <StaticQuery
         query={graphql`
           query {
-            site {
-              siteMetadata {
-                nav {
-                  external {
-                    text
-                    href
-                  }
-                  internal {
-                    text
-                  }
+            allCockpitExternalLinks {
+              nodes {
+                href {
+                  value
+                }
+                text {
+                  value
+                }
+              }
+            }
+            allCockpitInternalLinks(
+              sort: { order: ASC, fields: cockpitOrder }
+            ) {
+              nodes {
+                text {
+                  value
                 }
               }
             }
           }
         `}
         render={data => {
-          const nav = data.site.siteMetadata.nav;
+          const externalLinks = data.allCockpitExternalLinks.nodes.map(node => {
+            return {
+              text: node.text.value,
+              href: node.href.value,
+            };
+          });
+          const internalLinks = data.allCockpitInternalLinks.nodes.map(node => {
+            return {
+              text: node.text.value,
+            };
+          });
           return (
             <Bar>
-              {this.renderInternalLinks(nav.internal)}
-              {this.renderExternalLinks(nav.external)}
+              {this.renderInternalLinks(internalLinks)}
+              {this.renderExternalLinks(externalLinks)}
             </Bar>
           );
         }}
