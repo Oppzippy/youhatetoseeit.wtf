@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Scheuing",
   "dependencies": {
+    "@fika/gatsby-source-cockpit": "^1.1.2",
     "babel-plugin-styled-components": "^1.10.6",
     "blizzard.js": "^3.2.0",
     "dotenv": "^8.2.0",
