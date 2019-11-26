@@ -1,7 +1,6 @@
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import Logo from "./Logo.js";
 import Button from "./Button.js";
 import MainContentBox from "./MainContentBox.js";
 
@@ -16,6 +15,11 @@ const Subtitle = styled.h3`
   font-size: 1.37rem;
 `;
 
+const Logo = styled.img`
+  width: 500px;
+  max-width: 100%;
+`;
+
 class ApplyNow extends React.Component {
   render() {
     return (
@@ -24,7 +28,12 @@ class ApplyNow extends React.Component {
           query {
             cockpitMain {
               logo {
-                type
+                value {
+                  publicURL
+                }
+              }
+              title {
+                value
               }
               heading {
                 value
@@ -33,6 +42,9 @@ class ApplyNow extends React.Component {
                 value
               }
               apply_link {
+                value
+              }
+              apply_text {
                 value
               }
             }
@@ -44,7 +56,10 @@ class ApplyNow extends React.Component {
             <MainContentBox>
               <Section>
                 <h1>
-                  <Logo />
+                  <Logo
+                    src={content.logo.value.publicURL}
+                    alt={content.title.value}
+                  />
                 </h1>
               </Section>
               <Section>
@@ -52,7 +67,9 @@ class ApplyNow extends React.Component {
                 <p>{content.description.value}</p>
               </Section>
               <Section>
-                <Button href={content.apply_link.value}>Apply Now</Button>
+                <Button href={content.apply_link.value}>
+                  {content.apply_text.value}
+                </Button>
               </Section>
             </MainContentBox>
           );

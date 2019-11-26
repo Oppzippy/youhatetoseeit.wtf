@@ -28,12 +28,15 @@ class AllRaiders extends React.Component {
       raiderRanks.map(rank => [rank.id, rank.name])
     );
     const raiderMetadataByName = Object.fromEntries(
-      raiderMetadata.map(meta => [meta.name, meta])
+      raiderMetadata.map(meta => [
+        meta.name.toLowerCase() + meta.realm.toLowerCase(),
+        meta,
+      ])
     );
 
     const raiders = members
       .filter(member => {
-        // TODO see about moving this to the graphql query
+        // TODO see about moving this to the graphql query if possible
         return ranksById[member.rank];
       })
       .map((member, i) => {
@@ -43,7 +46,12 @@ class AllRaiders extends React.Component {
             key={i}
             rank={memberRank}
             character={member.character}
-            meta={raiderMetadataByName[member.character.name]}
+            meta={
+              raiderMetadataByName[
+                member.character.name.toLowerCase() +
+                  member.character.realm.toLowerCase()
+              ]
+            }
           />
         );
       });
