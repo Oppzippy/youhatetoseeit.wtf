@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 import Button from "./Button.js";
@@ -9,10 +10,6 @@ const Section = styled.section`
   &:not(:last-child) {
     margin-bottom: 20px;
   }
-`;
-
-const Subtitle = styled.h3`
-  font-size: 1.37rem;
 `;
 
 const Logo = styled.img`
@@ -26,7 +23,7 @@ class ApplyNow extends React.Component {
       <StaticQuery
         query={graphql`
           query {
-            cockpitMain {
+            cockpitApplyNow {
               logo {
                 value {
                   publicURL
@@ -35,11 +32,12 @@ class ApplyNow extends React.Component {
               title {
                 value
               }
-              heading {
-                value
-              }
-              description {
-                value
+              content {
+                value {
+                  internal {
+                    content
+                  }
+                }
               }
               apply_link {
                 value
@@ -51,7 +49,7 @@ class ApplyNow extends React.Component {
           }
         `}
         render={data => {
-          const content = data.cockpitMain;
+          const content = data.cockpitApplyNow;
           return (
             <MainContentBox>
               <Section>
@@ -63,8 +61,9 @@ class ApplyNow extends React.Component {
                 </h1>
               </Section>
               <Section>
-                <Subtitle>{content.heading.value}</Subtitle>
-                <p>{content.description.value}</p>
+                <ReactMarkdown
+                  source={content.content.value.internal.content}
+                />
               </Section>
               <Section>
                 <Button href={content.apply_link.value}>
