@@ -1,4 +1,5 @@
 import React from "react";
+import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import NavBar from "../components/NavBar.js";
@@ -7,7 +8,6 @@ import Raiders from "../components/Raiders.js";
 import { SnapContainer, SnapChild } from "../components/SnapContainer.js";
 import FullscreenVideoBackground from "../components/FullscreenVideoBackground.js";
 import favicon from "../images/favicon.ico";
-import video from "../videos/background.mp4";
 import "../components/Layout.css";
 
 const FullscreenContainer = styled.div`
@@ -39,7 +39,26 @@ class Index extends React.Component {
           />
           <link rel="icon" href={favicon} />
         </Helmet>
-        <FullscreenVideoBackground src={video} />
+        <StaticQuery
+          query={graphql`
+            query {
+              cockpitApplyNow {
+                background {
+                  value {
+                    publicURL
+                  }
+                }
+              }
+            }
+          `}
+          render={data => {
+            return (
+              <FullscreenVideoBackground
+                src={data.cockpitApplyNow.background.value.publicURL}
+              />
+            );
+          }}
+        />
         <FullscreenContainer>
           <NavBar scrollFunctions={this.state.scrollFunctions} />
           <SnapContainer
