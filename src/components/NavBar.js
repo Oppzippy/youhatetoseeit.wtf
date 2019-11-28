@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const Bar = styled.nav`
   position: fixed;
+  z-index: 10;
   display: flex;
   width: 100%;
   background-color: var(--bg-color-dark);

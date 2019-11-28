@@ -10,6 +10,7 @@ const ContentBox = styled.main`
   background-color: var(--bg-color-dark-transparent);
   border-radius: 10px;
   padding: 3rem;
+  margin: 3rem;
   @media (max-width: 800px) {
     width: 100%;
     border-radius: 0;
