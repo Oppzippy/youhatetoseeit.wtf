@@ -56,9 +56,17 @@ const linkIcons = {
 };
 
 class RaiderListing extends React.Component {
-  renderLinks(links) {
-    if (!links) {
+  renderLinks() {
+    const meta = this.props.meta;
+    if (!meta) {
       return;
+    }
+    const links = [];
+    if (meta.twitch) {
+      links.push({
+        type: "twitch",
+        href: `https://www.twitch.tv/${meta.twitch}`,
+      });
     }
     return links.map(link => {
       const icon = linkIcons[link.type];
@@ -100,7 +108,7 @@ class RaiderListing extends React.Component {
           >
             <img src={wowIcon} alt="armory" />
           </a>
-          {this.renderLinks(this.props.meta ? this.props.meta.links : null)}
+          {this.renderLinks()}
         </Icons>
       </div>
     );
