@@ -27,6 +27,7 @@ class AllRaiders extends React.Component {
     const ranksById = Object.fromEntries(
       raiderRanks.map(rank => [rank.id, rank.name])
     );
+    // keys are ${name}${realm} all lowercase
     const raiderMetadataByName = Object.fromEntries(
       raiderMetadata.map(meta => [
         meta.name.toLowerCase() + meta.realm.toLowerCase(),
@@ -45,7 +46,7 @@ class AllRaiders extends React.Component {
           <RaiderListing
             key={i}
             rank={memberRank}
-            character={member.character}
+            memberInfo={member}
             meta={
               raiderMetadataByName[
                 member.character.name.toLowerCase() +
@@ -98,9 +99,11 @@ class AllRaiders extends React.Component {
                   name
                   realm
                   class
-                  thumbnail
                 }
                 rank
+                thumbnail {
+                  publicURL
+                }
               }
             }
           }

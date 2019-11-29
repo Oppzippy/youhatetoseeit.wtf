@@ -9,6 +9,7 @@
 const config = require("./gatsby-config.js");
 const crypto = require("crypto");
 const blizzardjs = require("blizzard.js");
+const { createRemoteFileNode } = require("gatsby-source-filesystem");
 
 require("dotenv").config();
 
@@ -19,29 +20,51 @@ const blizzard = blizzardjs.initialize({
   locale: config.siteMetadata.guild.locale,
 });
 
-exports.sourceNodes = async ({ actions }) => {
-  const { createNode } = actions;
+const rendererUrl = `https://render-${config.siteMetadata.guild.region}.worldofwarcraft.com/character`;
+
+exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
+  const { createNode, createNodeField } = actions;
   const token = await blizzard.getApplicationToken();
   blizzard.defaults.token = token.data.access_token;
   const guild = await blizzard.wow.guild("members", {
     name: config.siteMetadata.guild.name,
     realm: config.siteMetadata.guild.realm,
   });
-  guild.data.members.map((member, i) => {
-    const memberNode = {
-      id: `${i}`,
-      parent: "__SOURCE__",
+  const promises = guild.data.members.map(async (member, i) => {
+    const id = createNodeId(
+      `GuildMembers__${member.character.name}-${member.character.realm}`
+    );
+
+    let thumbnailNode;
+    try {
+      thumbnailNode = await createRemoteFileNode({
+        url: `${rendererUrl}/${member.character.thumbnail}`,
+        store,
+        cache,
+        createNode,
+        createNodeId,
+      });
+    } catch (err) {
+      console.error(
+        `Error fetching ${member.character.name}-${member.character.realm}\n${err}`
+      );
+    }
+    const memberNodeInfo = {
+      id: id,
+      parent: null,
       internal: {
         type: "GuildMember",
       },
       children: [],
+      thumbnail___NODE: thumbnailNode ? thumbnailNode.id : null,
       ...member,
     };
-    const contentDigest = crypto
+
+    memberNodeInfo.internal.contentDigest = crypto
       .createHash("md5")
-      .update(JSON.stringify(memberNode))
+      .update(JSON.stringify(memberNodeInfo))
       .digest("hex");
-    memberNode.internal.contentDigest = contentDigest;
-    createNode(memberNode);
+    const memberNode = await createNode(memberNodeInfo);
   });
+  await Promise.allSettled(promises);
 };

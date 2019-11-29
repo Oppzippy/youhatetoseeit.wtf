@@ -89,20 +89,19 @@ class RaiderListing extends React.Component {
 
   render() {
     const rank = this.props.rank;
-    const { name, realm, thumbnail } = this.props.character;
+    const memberInfo = this.props.memberInfo;
+    const character = memberInfo.character;
     return (
       <div>
-        <RaiderBox
-          thumbnail={`https://render-us.worldofwarcraft.com/character/${thumbnail}`}
-        >
+        <RaiderBox thumbnail={memberInfo.thumbnail.publicURL}>
           <RaiderChild>
-            <Name classId={this.props.character.class}>{name}</Name>
+            <Name classId={character.class}>{character.name}</Name>
             <Rank>{rank}</Rank>
           </RaiderChild>
         </RaiderBox>
         <Icons>
           <a
-            href={`https://worldofwarcraft.com/en-us/character/us/${realm}/${name}`}
+            href={`https://worldofwarcraft.com/en-us/character/us/${character.realm}/${character.name}`}
             rel="noopener noreferrer"
             target="_blank"
           >
