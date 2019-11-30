@@ -23,7 +23,7 @@ class RaidersDataChild extends React.Component {
     this.twitchClientId = this.props.twitchClientId;
 
     this.updateStreamers = this.updateStreamers.bind(this);
-    this.updater = setInterval(this.updateStreamers, 10000);
+    this.updater = setInterval(this.updateStreamers, 5 * 60 * 1000); // 5 min
     this.updateStreamers();
   }
 
@@ -32,7 +32,12 @@ class RaidersDataChild extends React.Component {
   }
 
   updateStreamers() {
-    if (!this.twitchClientId || this.state.streamers.length === 0) {
+    // Don't show live indicator in static version
+    if (
+      !this.twitchClientId ||
+      this.state.streamers.length === 0 ||
+      typeof window === "undefined"
+    ) {
       return;
     }
     const searchParams = new URLSearchParams();
