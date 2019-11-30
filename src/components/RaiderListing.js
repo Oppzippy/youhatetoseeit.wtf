@@ -38,6 +38,16 @@ const Name = styled.div`
 
 const Rank = styled.div``;
 
+const LiveIndicator = styled.div`
+  position: absolute;
+  bottom: 7px;
+  right: 10px;
+  background-color: var(--bg-color-notify-transparent);
+  padding: 2px;
+  border-radius: 2px;
+  text-transform: uppercase;
+`;
+
 const Icons = styled.div`
   width: 100%;
   display: flex;
@@ -87,6 +97,12 @@ class RaiderListing extends React.Component {
     });
   }
 
+  renderLiveIndicator() {
+    if (this.props.isLiveStreaming) {
+      return <LiveIndicator>Live</LiveIndicator>;
+    }
+  }
+
   render() {
     const rank = this.props.rank;
     const memberInfo = this.props.memberInfo;
@@ -97,6 +113,7 @@ class RaiderListing extends React.Component {
           <RaiderChild>
             <Name classId={character.class}>{character.name}</Name>
             <Rank>{rank}</Rank>
+            {this.renderLiveIndicator()}
           </RaiderChild>
         </RaiderBox>
         <Icons>

@@ -12,6 +12,8 @@ html {
   --bg-color-dark-transparent: rgba(10, 10, 10, 0.6);
   --bg-color-dark-2: rgb(80, 80, 80);
   --bg-color-light: rgb(222, 222, 222);
+  --bg-color-notify: rgb(200, 0, 0);
+  --bg-color-notify-transparent: rgba(200, 0, 0, 0.8);
   --text-color-light: rgb(240, 240, 240);
   --text-color-dark: rgb(30, 30, 30);
   --shadow-color: rgba(30, 30, 30, 0.2);

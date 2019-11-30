@@ -1,20 +1,37 @@
 import React from "react";
-import styled from "styled-components";
-import AllRaiders from "./AllRaiders.js";
-import MainContentBox from "./MainContentBox.js";
-
-const Heading = styled.h2`
-  font-size: 1.6rem;
-  margin-bottom: 40px;
-`;
+import { graphql, StaticQuery } from "gatsby";
+import RaidersDataChild from "./RaidersDataChild.js";
 
 class Raiders extends React.Component {
   render() {
     return (
-      <MainContentBox>
-        <Heading>Raiders</Heading>
-        <AllRaiders />
-      </MainContentBox>
+      <StaticQuery
+        query={graphql`
+          query {
+            allCockpitRaiderMeta {
+              nodes {
+                twitch {
+                  value
+                }
+              }
+            }
+            cockpitApiKeys {
+              twitch_client_id {
+                value
+              }
+            }
+          }
+        `}
+        render={data => {
+          const streamers = new Set(
+            data.allCockpitRaiderMeta.nodes.map(node => node.twitch.value)
+          );
+          const clientId = data.cockpitApiKeys.twitch_client_id.value;
+          return (
+            <RaidersDataChild streamers={streamers} twitchClientId={clientId} />
+          );
+        }}
+      />
     );
   }
 }

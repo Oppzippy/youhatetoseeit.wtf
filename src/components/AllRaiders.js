@@ -42,17 +42,21 @@ class AllRaiders extends React.Component {
       })
       .map((member, i) => {
         const memberRank = ranksById[member.rank];
+        const nameIndex =
+          member.character.name.toLowerCase() +
+          member.character.realm.toLowerCase();
         return (
           <RaiderListing
             key={i}
             rank={memberRank}
             memberInfo={member}
-            meta={
-              raiderMetadataByName[
-                member.character.name.toLowerCase() +
-                  member.character.realm.toLowerCase()
-              ]
-            }
+            isLiveStreaming={this.props.liveStreamers.has(
+              raiderMetadataByName[nameIndex] &&
+                raiderMetadataByName[nameIndex].twitch
+                ? raiderMetadataByName[nameIndex].twitch.toLowerCase()
+                : false
+            )}
+            meta={raiderMetadataByName[nameIndex]}
           />
         );
       });
