@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { StreamerConsumer } from "../providers/StreamerProvider.js";
 import wowIcon from "../images/wow-icon.svg";
 import twitchIcon from "../images/twitch-logo.svg";
 
@@ -98,9 +99,20 @@ class RaiderListing extends React.Component {
   }
 
   renderLiveIndicator() {
-    if (this.props.isLiveStreaming) {
-      return <LiveIndicator>Live</LiveIndicator>;
-    }
+    return (
+      <StreamerConsumer>
+        {({ liveStreamers }) => {
+          const meta = this.props.meta;
+          if (
+            meta &&
+            meta.twitch &&
+            liveStreamers.has(meta.twitch.toLowerCase())
+          ) {
+            return <LiveIndicator>Live</LiveIndicator>;
+          }
+        }}
+      </StreamerConsumer>
+    );
   }
 
   render() {

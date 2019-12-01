@@ -50,12 +50,6 @@ class AllRaiders extends React.Component {
             key={i}
             rank={memberRank}
             memberInfo={member}
-            isLiveStreaming={this.props.liveStreamers.has(
-              raiderMetadataByName[nameIndex] &&
-                raiderMetadataByName[nameIndex].twitch
-                ? raiderMetadataByName[nameIndex].twitch.toLowerCase()
-                : false
-            )}
             meta={raiderMetadataByName[nameIndex]}
           />
         );

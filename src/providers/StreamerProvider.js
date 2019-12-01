@@ -1,15 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { isEqual } from "lodash";
-import AllRaiders from "./AllRaiders.js";
-import MainContentBox from "./MainContentBox.js";
 
-const Heading = styled.h2`
-  font-size: 1.6rem;
-  margin-bottom: 40px;
-`;
+const StreamerContext = React.createContext();
 
-class RaidersDataChild extends React.Component {
+class StreamerProvider extends React.Component {
   state = {
     streamers: new Set(),
     liveStreamers: new Set(),
@@ -18,9 +12,8 @@ class RaidersDataChild extends React.Component {
   constructor(props) {
     super(props);
     // TODO this is static so we don't have to worry about it right now,
-    // but these should be updated when props change
+    // but it should be updated when props change
     this.state.streamers = this.props.streamers;
-    this.twitchClientId = this.props.twitchClientId;
 
     this.updateStreamers = this.updateStreamers.bind(this);
     this.updater = setInterval(this.updateStreamers, 5 * 60 * 1000); // 5 min
@@ -32,9 +25,9 @@ class RaidersDataChild extends React.Component {
   }
 
   updateStreamers() {
-    // Don't show live indicator in static version
+    // Don't check if live in static version
     if (
-      !this.twitchClientId ||
+      !this.props.twitchClientId ||
       this.state.streamers.length === 0 ||
       typeof window === "undefined"
     ) {
@@ -44,10 +37,11 @@ class RaidersDataChild extends React.Component {
     this.state.streamers.forEach(streamer =>
       searchParams.append("user_login", streamer)
     );
+    // TODO there's some limit to the number of streamers per query
     fetch(`https://api.twitch.tv/helix/streams?${searchParams.toString()}`, {
       method: "GET",
       headers: {
-        "Client-ID": this.twitchClientId,
+        "Client-ID": this.props.twitchClientId,
       },
     })
       .then(resp => resp.json())
@@ -62,17 +56,17 @@ class RaidersDataChild extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.state, nextState); // || this.props !== nextProps;
+    return !isEqual(this.state, nextState);
   }
 
   render() {
     return (
-      <MainContentBox>
-        <Heading>Raiders</Heading>
-        <AllRaiders liveStreamers={this.state.liveStreamers} />
-      </MainContentBox>
+      <StreamerContext.Provider value={this.state}>
+        {this.props.children}
+      </StreamerContext.Provider>
     );
   }
 }
 
-export default RaidersDataChild;
+const StreamerConsumer = StreamerContext.Consumer;
+export { StreamerProvider, StreamerConsumer };
