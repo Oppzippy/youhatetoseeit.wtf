@@ -27,7 +27,7 @@ module.exports = {
       resolve: `@fika/gatsby-source-cockpit`,
       options: {
         token: process.env.COCKPIT_API_TOKEN,
-        baseUrl: `http://127.0.0.1`,
+        baseUrl: `https://cms.youhatetoseeit.wtf`,
         locales: [],
         collections: [],
         singletons: [],
