@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import NavBar from "../components/NavBar.js";
 import ApplyNow from "../components/ApplyNow.js";
+import AboutUs from "../components/AboutUs.js";
 import Raiders from "../components/Raiders.js";
 import { SnapContainer, SnapChild } from "../components/SnapContainer.js";
 import FullscreenVideoBackground from "../components/FullscreenVideoBackground.js";
@@ -70,10 +71,13 @@ class Index extends React.Component {
             }
           >
             <Section>
-              <ApplyNow ref={this.about} />
+              <ApplyNow />
             </Section>
             <Section>
-              <Raiders ref={this.raiders} />
+              <AboutUs />
+            </Section>
+            <Section>
+              <Raiders />
             </Section>
           </SnapContainer>
         </FullscreenContainer>

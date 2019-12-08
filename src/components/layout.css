@@ -9,7 +9,7 @@
 html {
   box-sizing: border-box;
   --bg-color-dark: rgb(30, 30, 30);
-  --bg-color-dark-transparent: rgba(10, 10, 10, 0.6);
+  --bg-color-dark-transparent: rgba(16, 16, 16, 0.7);
   --bg-color-dark-2: rgb(80, 80, 80);
   --bg-color-light: rgb(222, 222, 222);
   --bg-color-notify: rgb(200, 0, 0);
@@ -20,18 +20,6 @@ html {
   --primary-color: #499cdb; /* Logo Blue */
   --primary-color-dark: #004a89;
   --primary-color-dark-2: #002261;
-  --class-color-1: #c79c6e; /* Warrior */
-  --class-color-2: #f58cba; /* Paladin */
-  --class-color-3: #a9d271; /* Hunter */
-  --class-color-4: #fff569; /* Rogue */
-  --class-color-5: #ffffff; /* Priest */
-  --class-color-6: #c41f3b; /* Death Knight */
-  --class-color-7: #0070de; /* Shaman */
-  --class-color-8: #40c7eb; /* Mage */
-  --class-color-9: #8787ed; /* Warlock */
-  --class-color-10: #00ff96; /* Monk */
-  --class-color-11: #ff7d0a; /* Druid */
-  --class-color-12: #a330c9; /* Demon Hunter */
   font-family: sans-serif;
   color: var(--text-color-light);
 }

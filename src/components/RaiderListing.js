@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { StreamerConsumer } from "../providers/StreamerProvider.js";
+import ClassColor from "./ClassColor.js";
 import wowIcon from "../images/wow-icon.svg";
 import twitchIcon from "../images/twitch-logo.svg";
 
@@ -123,7 +124,11 @@ class RaiderListing extends React.Component {
       <div>
         <RaiderBox thumbnail={memberInfo.thumbnail.publicURL}>
           <RaiderChild>
-            <Name classId={character.class}>{character.name}</Name>
+            <Name>
+              <ClassColor classId={character.class}>
+                {character.name}
+              </ClassColor>
+            </Name>
             <Rank>{rank}</Rank>
             {this.renderLiveIndicator()}
           </RaiderChild>

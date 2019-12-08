@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ContentBox = styled.main`
+const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
