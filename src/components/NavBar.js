@@ -9,6 +9,11 @@ const BarZeroSizeParent = styled.div`
   top: 0;
   width: 100%;
   height: 0;
+  @media (max-width: 600px) {
+    position: static;
+    width: auto;
+    height: auto;
+  }
 `;
 
 const Bar = styled.nav`
