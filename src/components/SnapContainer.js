@@ -188,7 +188,6 @@ class SnapContainer extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // Ignore state
-    console.log(this.props.parent);
     return !isEqual(nextProps, this.props);
   }
 
