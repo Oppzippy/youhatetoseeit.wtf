@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { isEqual } from "lodash";
+import bowser from "bowser";
 
 const Container = styled.div`
   flex-grow: 1;
@@ -35,15 +36,9 @@ class SnapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
-    if (typeof window !== "undefined") {
-      this.mediaQuery = window.matchMedia("(hover: none)");
-    }
 
     this.onScroll = this.onScroll.bind(this);
-  }
-
-  isScrollSnappingEnabled() {
-    return !this.mediaQuery.matches;
+    this.onMouseWheel = this.onMouseWheel.bind(this);
   }
 
   componentDidMount() {
@@ -53,11 +48,21 @@ class SnapContainer extends React.Component {
       );
       this.props.setScrollFunctions(scrollFunctions);
     }
-    this.getEventListenerParent().addEventListener("scroll", this.onScroll);
+
+    // Disable snapping for unsupported browsers
+    const scrollParent = this.props.parent || this.container.current;
+    if (scrollParent) {
+      this.setScrollParent(scrollParent);
+    }
+    const browser = bowser.getParser(window.navigator.userAgent);
+    this.browserName = browser.getBrowserName();
+    if (browser.getBrowserName() === "Microsoft Edge") {
+      this.isSnappingDisabled = true;
+    }
   }
 
   componentWillUnmount() {
-    this.getEventListenerParent().removeEventListener("scroll", this.onScroll);
+    this.removeScrollParent();
   }
 
   getDomNode() {
@@ -65,47 +70,80 @@ class SnapContainer extends React.Component {
   }
 
   getScrollParent() {
-    return this.props.parent || this.container.current;
+    return this.scrollParent;
   }
 
-  getEventListenerParent() {
-    // documentElement holds the scroll position but does not fire scroll events.
-    // window does instead.
-    return this.getScrollParent() === document.documentElement
-      ? window
-      : this.getScrollParent();
+  setScrollParent(scrollParent) {
+    this.removeScrollParent();
+    this.scrollParent = scrollParent;
+    this.scrollParent.addEventListener("scroll", this.onScroll);
+    this.scrollParent.addEventListener("mousewheel", this.onMouseWheel, {
+      passive: false,
+    });
+    this.scrollParent.addEventListener("touchmove", this.onMouseWheel, {
+      passive: false,
+    });
+  }
+
+  removeScrollParent() {
+    if (this.scrollParent) {
+      this.scrollParent.removeEventListener("scroll", this.onScroll);
+      this.scrollParent.removeEventListener("mousewheel", this.onMouseWheel);
+      this.scrollParent.removeEventListener("touchmove", this.onMouseWheel);
+    }
+  }
+
+  getScrollParentY() {
+    const scrollParent = this.getScrollParent();
+    if (this.browserName === "chrome" && scrollParent === window) {
+      return document.querySelector("html").scrollTop;
+    }
+    return scrollParent === window
+      ? scrollParent.scrollY
+      : scrollParent.scrollTop;
   }
 
   isNodeInView(node) {
     const scrollParent = this.getScrollParent();
 
-    const top = scrollParent.scrollTop;
-    const bottom = top + scrollParent.offsetHeight;
+    const top = this.getScrollParentY();
+    const bottom =
+      top + (scrollParent.offsetHeight || scrollParent.innerHeight); // innerHeight for window
 
-    const elementTop = node.offsetTop - scrollParent.offsetTop;
+    const elementTop = node.offsetTop;
     const elementBottom = elementTop + node.offsetHeight;
     return !(top >= elementBottom || bottom <= elementTop);
   }
 
   getScrollDirection() {
-    const scrollY = this.getScrollParent().scrollTop;
-    const scrollingDown = this.state.scrollY > scrollY;
+    const scrollY = this.getScrollParentY();
+    const scrollingDown = this.state.scrollY < scrollY;
+
     this.setState({ scrollY });
     return scrollingDown;
   }
 
-  onScroll() {
-    if (this.state.scrolling || !this.isScrollSnappingEnabled()) {
+  onMouseWheel(event) {
+    if (this.state.scrolling) {
+      event.preventDefault();
+    }
+  }
+
+  onScroll(event) {
+    if (this.state.scrolling) {
       return;
     }
     const scrollingDown = this.getScrollDirection();
+    if (this.isSnappingDisabled) {
+      return;
+    }
 
     const nodes = this.childRefs.map(child => child.getDomNode());
     const inView = nodes.filter(node => this.isNodeInView(node));
     if (inView.length > 1) {
       const target = inView.reduce((acc, curr) => {
         // highest node if we're scrolling up, or lowest if we're scrolling down
-        return scrollingDown ^ (acc.offsetTop > curr.offsetTop) ? acc : curr;
+        return scrollingDown ^ (acc.offsetTop < curr.offsetTop) ? acc : curr;
       });
       this.scrollTo(target);
     }
@@ -119,7 +157,7 @@ class SnapContainer extends React.Component {
     let startTime = null;
     const startY = this.state.scrollY;
     const duration = this.props.duration || 500;
-    const target = node.offsetTop - this.getScrollParent().offsetTop;
+    const target = node.offsetTop;
     const step = timestamp => {
       if (!startTime) {
         startTime = timestamp;
@@ -131,14 +169,14 @@ class SnapContainer extends React.Component {
       // offset relative to starting position
       const offset = (target - startY) * sinProgress;
       if (progress < 1) {
-        scrollParent.scrollTo(0, startY + offset);
+        scrollParent.scrollTo(0, Math.floor(startY + offset));
         this.setState({
           animationID: window.requestAnimationFrame(step),
-          scrollY: scrollParent.scrollTop,
+          scrollY: Math.floor(startY + offset),
         });
       } else {
         scrollParent.scrollTo(0, target);
-        this.setState({ scrolling: false });
+        this.setState({ scrolling: false, scrollY: target });
         this.animationID = null;
       }
     };
@@ -150,6 +188,7 @@ class SnapContainer extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // Ignore state
+    console.log(this.props.parent);
     return !isEqual(nextProps, this.props);
   }
 
@@ -167,7 +206,6 @@ class SnapContainer extends React.Component {
     return (
       <Container
         style={this.state.style}
-        onScroll={() => this.onScroll()}
         ref={this.container}
         isScrollParent={typeof this.props.parent === "undefined"}
       >

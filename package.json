@@ -8,6 +8,7 @@
     "@fika/gatsby-source-cockpit": "^1.1.2",
     "babel-plugin-styled-components": "^1.10.6",
     "blizzard.js": "^3.2.0",
+    "bowser": "^2.7.0",
     "dotenv": "^8.2.0",
     "gatsby": "^2.16.1",
     "gatsby-image": "^2.2.29",

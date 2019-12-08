@@ -15,6 +15,8 @@ const FullscreenContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-y: scroll;
 `;
 
 const Section = styled(SnapChild)`
@@ -29,6 +31,21 @@ class Index extends React.Component {
   state = {
     scrollFunctions: [],
   };
+  constructor(props) {
+    super(props);
+    // Don't use window as scroll parent because chrome has a bug where you can
+    // queue up a big scroll while we're doing the smooth animation, and then it
+    // jumps afterwards.
+    this.fullscreenContainerRef = React.createRef();
+    this.snapContainerRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.snapContainerRef.current.setScrollParent(
+      this.fullscreenContainerRef.current
+    );
+  }
+
   render() {
     return (
       <>
@@ -60,15 +77,14 @@ class Index extends React.Component {
             );
           }}
         />
-        <FullscreenContainer>
+        <FullscreenContainer ref={this.fullscreenContainerRef}>
           <NavBar scrollFunctions={this.state.scrollFunctions} />
           <SnapContainer
             setScrollFunctions={funcs =>
               this.setState({ scrollFunctions: funcs })
             }
-            parent={
-              typeof document !== "undefined" ? document.documentElement : null
-            }
+            parent={this.fullscreenContainerRef.current}
+            ref={this.snapContainerRef}
           >
             <Section>
               <ApplyNow />

@@ -2,8 +2,16 @@ import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 
+// Jank, but it lets us use sticky like fixed
+// Fixed will cover up the scroll bar since it's a div and not <body>
+const BarZeroSizeParent = styled.div`
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 0;
+`;
+
 const Bar = styled.nav`
-  position: fixed;
   z-index: 10;
   display: flex;
   width: 100%;
@@ -102,10 +110,12 @@ class NavBar extends React.Component {
             };
           });
           return (
-            <Bar>
-              {this.renderInternalLinks(internalLinks)}
-              {this.renderExternalLinks(externalLinks)}
-            </Bar>
+            <BarZeroSizeParent>
+              <Bar>
+                {this.renderInternalLinks(internalLinks)}
+                {this.renderExternalLinks(externalLinks)}
+              </Bar>
+            </BarZeroSizeParent>
           );
         }}
       />
