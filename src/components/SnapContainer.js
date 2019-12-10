@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { isEqual } from "lodash";
 import bowser from "bowser";
 
 const Container = styled.div`
@@ -28,11 +27,6 @@ class SnapChild extends React.Component {
 }
 
 class SnapContainer extends React.Component {
-  state = {
-    scrollY: 0,
-    scrolling: false,
-  };
-
   constructor(props) {
     super(props);
     this.container = React.createRef();
@@ -76,6 +70,7 @@ class SnapContainer extends React.Component {
   setScrollParent(scrollParent) {
     this.removeScrollParent();
     this.scrollParent = scrollParent;
+    this.scrollY = this.getScrollParentY();
     this.scrollParent.addEventListener("scroll", this.onScroll);
     this.scrollParent.addEventListener("mousewheel", this.onMouseWheel, {
       passive: false,
@@ -117,23 +112,22 @@ class SnapContainer extends React.Component {
 
   getScrollDirection() {
     const scrollY = this.getScrollParentY();
-    const scrollingDown = this.state.scrollY < scrollY;
+    const scrollingDown = this.scrollY < scrollY;
 
-    this.setState({ scrollY });
     return scrollingDown;
   }
 
   onMouseWheel(event) {
-    if (this.state.scrolling) {
+    if (this.scrolling) {
       event.preventDefault();
     }
   }
 
   onScroll(event) {
-    if (this.state.scrolling) {
+    if (this.scrolling) {
       return;
     }
-    const scrollingDown = this.getScrollDirection();
+    const isScrollingDown = this.getScrollDirection();
     if (this.isSnappingDisabled) {
       return;
     }
@@ -143,19 +137,20 @@ class SnapContainer extends React.Component {
     if (inView.length > 1) {
       const target = inView.reduce((acc, curr) => {
         // highest node if we're scrolling up, or lowest if we're scrolling down
-        return scrollingDown ^ (acc.offsetTop < curr.offsetTop) ? acc : curr;
+        return isScrollingDown ^ (acc.offsetTop < curr.offsetTop) ? acc : curr;
       });
       this.scrollTo(target);
     }
+    this.scrollY = this.getScrollParentY();
   }
 
   scrollTo(node) {
-    if (this.state.animationID) {
-      window.cancelAnimationFrame(this.state.animationID);
-      this.setState({ animationID: null });
+    if (this.animationID) {
+      window.cancelAnimationFrame(this.animationID);
+      this.animationID = null;
     }
     let startTime = null;
-    const startY = this.state.scrollY;
+    const startY = this.scrollY;
     const duration = this.props.duration || 500;
     const target = node.offsetTop;
     const step = timestamp => {
@@ -170,25 +165,17 @@ class SnapContainer extends React.Component {
       const offset = (target - startY) * sinProgress;
       if (progress < 1) {
         scrollParent.scrollTo(0, Math.floor(startY + offset));
-        this.setState({
-          animationID: window.requestAnimationFrame(step),
-          scrollY: Math.floor(startY + offset),
-        });
+        this.animationID = window.requestAnimationFrame(step);
+        this.scrollY = Math.floor(startY + offset);
       } else {
         scrollParent.scrollTo(0, target);
-        this.setState({ scrolling: false, scrollY: target });
+        this.scrolling = false;
+        this.scrollY = target;
         this.animationID = null;
       }
     };
     window.requestAnimationFrame(step);
-    this.setState({
-      scrolling: true,
-    });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // Ignore state
-    return !isEqual(nextProps, this.props);
+    this.scrolling = true;
   }
 
   render() {
@@ -204,7 +191,6 @@ class SnapContainer extends React.Component {
     });
     return (
       <Container
-        style={this.state.style}
         ref={this.container}
         isScrollParent={typeof this.props.parent === "undefined"}
       >
