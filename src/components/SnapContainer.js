@@ -2,6 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import bowser from "bowser";
 
+// All mobile devices, smart tvs, etc.
+const osBlacklist = new Set([
+  "iOS",
+  "Android",
+  "Windows Phone",
+  "BlackBerry",
+  "PlayStation 4",
+  "WebOS",
+  "Bada",
+  "Tizen",
+  "Roku",
+]);
+
 const Container = styled.div`
   flex-grow: 1;
   overflow-y: ${props => (props.isScrollParent ? "scroll" : "initial")};
@@ -49,8 +62,11 @@ class SnapContainer extends React.Component {
       this.setScrollParent(scrollParent);
     }
     const browser = bowser.getParser(window.navigator.userAgent);
-    this.browserName = browser.getBrowserName();
-    if (browser.getBrowserName() === "Microsoft Edge") {
+    if (
+      browser.isBrowser("Microsoft Edge") || // edge doesn't scroll smoothly
+      osBlacklist.has(browser.getOSName())
+    ) {
+      // TODO check if safari works
       this.isSnappingDisabled = true;
     }
   }
@@ -75,27 +91,27 @@ class SnapContainer extends React.Component {
     this.scrollParent.addEventListener("mousewheel", this.onMouseWheel, {
       passive: false,
     });
-    this.scrollParent.addEventListener("touchmove", this.onMouseWheel, {
-      passive: false,
-    });
   }
 
   removeScrollParent() {
     if (this.scrollParent) {
       this.scrollParent.removeEventListener("scroll", this.onScroll);
       this.scrollParent.removeEventListener("mousewheel", this.onMouseWheel);
-      this.scrollParent.removeEventListener("touchmove", this.onMouseWheel);
     }
   }
 
   getScrollParentY() {
     const scrollParent = this.getScrollParent();
-    if (this.browserName === "chrome" && scrollParent === window) {
-      return document.querySelector("html").scrollTop;
-    }
     return scrollParent === window
       ? scrollParent.scrollY
       : scrollParent.scrollTop;
+  }
+
+  getScrollParentHeight() {
+    const scrollParent = this.getScrollParent();
+    return scrollParent === window
+      ? scrollParent.innerHeight
+      : scrollParent.offsetHeight;
   }
 
   isNodeInView(node) {
@@ -112,9 +128,12 @@ class SnapContainer extends React.Component {
 
   getScrollDirection() {
     const scrollY = this.getScrollParentY();
-    const scrollingDown = this.scrollY < scrollY;
-
-    return scrollingDown;
+    if (this.scrollY < scrollY) {
+      return 1;
+    } else if (this.scrollY > scrollY) {
+      return -1;
+    }
+    return 0;
   }
 
   onMouseWheel(event) {
@@ -125,10 +144,15 @@ class SnapContainer extends React.Component {
 
   onScroll(event) {
     if (this.scrolling) {
+      // Don't try to snap while an animation is playing
       return;
     }
-    const isScrollingDown = this.getScrollDirection();
     if (this.isSnappingDisabled) {
+      return;
+    }
+    const scrollDirection = this.getScrollDirection();
+    if (scrollDirection === 0) {
+      // Scroll event occurred, but no change in y
       return;
     }
 
@@ -137,14 +161,22 @@ class SnapContainer extends React.Component {
     if (inView.length > 1) {
       const target = inView.reduce((acc, curr) => {
         // highest node if we're scrolling up, or lowest if we're scrolling down
-        return isScrollingDown ^ (acc.offsetTop < curr.offsetTop) ? acc : curr;
+        return (scrollDirection === 1) ^ (acc.offsetTop < curr.offsetTop)
+          ? acc
+          : curr;
       });
-      this.scrollTo(target);
+      this.scrollTo(
+        scrollDirection === 1
+          ? target
+          : target.offsetTop +
+              target.offsetHeight -
+              this.getScrollParentHeight()
+      );
     }
     this.scrollY = this.getScrollParentY();
   }
 
-  scrollTo(node) {
+  scrollTo(target) {
     if (this.animationID) {
       window.cancelAnimationFrame(this.animationID);
       this.animationID = null;
@@ -152,7 +184,9 @@ class SnapContainer extends React.Component {
     let startTime = null;
     const startY = this.scrollY;
     const duration = this.props.duration || 500;
-    const target = node.offsetTop;
+    if (typeof target === "object") {
+      target = target.offsetTop;
+    }
     const step = timestamp => {
       if (!startTime) {
         startTime = timestamp;

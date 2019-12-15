@@ -1,18 +1,25 @@
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
+import hamburger from "../images/icons/menu-24px.svg";
+import doubleArrow from "../images/icons/double_arrow-24px.svg";
 
 // Jank, but it lets us use sticky like fixed
 // Fixed will cover up the scroll bar since it's a div and not <body>
 const BarZeroSizeParent = styled.div`
   position: sticky;
+  z-index: 10;
   top: 0;
   width: 100%;
   height: 0;
   @media (max-width: 600px) {
-    position: static;
-    width: auto;
-    height: auto;
+    position: fixed;
+    width: 150%;
+    padding-right: 100%;
+    height: 100%;
+    left: ${props => (props.visible ? "0" : "-50%")};
+    visibility: ${props => (props.visible ? "visible" : "hidden")};
+    transition: left 0.4s, visibility 0.4s;
   }
 `;
 
@@ -24,9 +31,8 @@ const Bar = styled.nav`
   padding: 0 8%;
   justify-content: space-between;
   @media (max-width: 600px) {
-    /* TODO improve UX on small screens */
     flex-direction: column;
-    position: static;
+    height: 100%;
   }
 `;
 
@@ -48,11 +54,59 @@ const BarSection = styled.section`
   }
 `;
 
+const HamburgerMenu = styled.div`
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+  background-color: rgba(222, 222, 222, 0.75);
+  border-radius: 25%;
+  padding: 10px;
+  transition: background-color 0.1s;
+  z-index: 5;
+  &:hover {
+    background-color: #fff;
+  }
+  img {
+    width: 40px;
+  }
+  visibility: hidden;
+  @media (max-width: 600px) {
+    visibility: visible;
+  }
+`;
+
+const CloseButton = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 66.6667%;
+  cursor: pointer;
+  transform: scaleX(-1.4) scaleY(2);
+  z-index: 5;
+  img {
+    width: 40px;
+  }
+  visibility: hidden;
+  @media (max-width: 600px) {
+    visibility: visible;
+  }
+`;
+
 class NavBar extends React.Component {
+  state = {
+    visible: false,
+  };
+
   renderInternalLinks(linkData) {
     let links = linkData.map((link, i) => {
       return (
-        <span onClick={this.props.scrollFunctions[i]} key={link.text}>
+        <span
+          onClick={() => {
+            this.props.scrollFunctions[i]();
+            this.setState({ visible: false }); // hide sidebar on mobile
+          }}
+          key={link.text}
+        >
           {link.text}
         </span>
       );
@@ -115,12 +169,28 @@ class NavBar extends React.Component {
             };
           });
           return (
-            <BarZeroSizeParent>
-              <Bar>
-                {this.renderInternalLinks(internalLinks)}
-                {this.renderExternalLinks(externalLinks)}
-              </Bar>
-            </BarZeroSizeParent>
+            <>
+              <HamburgerMenu
+                onClick={() => {
+                  this.setState({ visible: true });
+                }}
+              >
+                <img src={hamburger} alt="Open navigation sidebar" />
+              </HamburgerMenu>
+              <BarZeroSizeParent visible={this.state.visible}>
+                <Bar>
+                  {this.renderInternalLinks(internalLinks)}
+                  {this.renderExternalLinks(externalLinks)}
+                </Bar>
+                <CloseButton
+                  onClick={() => {
+                    this.setState({ visible: false });
+                  }}
+                >
+                  <img src={doubleArrow} alt="Close navigation sidebar" />
+                </CloseButton>
+              </BarZeroSizeParent>
+            </>
           );
         }}
       />

@@ -13,6 +13,7 @@ const ContentBox = styled.div`
   margin: 3rem;
   @media (max-width: 800px) {
     width: 100%;
+    margin: 0;
     border-radius: 0;
   }
   @media (max-width: 650px) {
