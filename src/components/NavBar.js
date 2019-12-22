@@ -4,6 +4,8 @@ import styled from "styled-components";
 import hamburger from "../images/icons/menu-24px.svg";
 import doubleArrow from "../images/icons/double_arrow-24px.svg";
 
+const hamburgerBreakpoint = "999px";
+
 // Jank, but it lets us use sticky like fixed
 // Fixed will cover up the scroll bar since it's a div and not <body>
 const BarZeroSizeParent = styled.div`
@@ -12,12 +14,12 @@ const BarZeroSizeParent = styled.div`
   top: 0;
   width: 100%;
   height: 0;
-  @media (max-width: 600px) {
+  @media (max-width: ${hamburgerBreakpoint}) {
     position: fixed;
-    width: 150%;
-    padding-right: 100%;
+    width: 200%;
+    padding-right: 133%;
     height: 100%;
-    left: ${props => (props.visible ? "0" : "-50%")};
+    left: ${props => (props.visible ? "0%" : "-67%")};
     visibility: ${props => (props.visible ? "visible" : "hidden")};
     transition: left 0.4s, visibility 0.4s;
   }
@@ -30,7 +32,7 @@ const Bar = styled.nav`
   background-color: var(--bg-color-dark);
   padding: 0 8%;
   justify-content: space-between;
-  @media (max-width: 600px) {
+  @media (max-width: ${hamburgerBreakpoint}) {
     flex-direction: column;
     height: 100%;
   }
@@ -49,7 +51,7 @@ const BarSection = styled.section`
       background-color: var(--bg-color-dark-2);
     }
   }
-  @media (max-width: 600px) {
+  @media (max-width: ${hamburgerBreakpoint}) {
     flex-direction: column;
   }
 `;
@@ -71,7 +73,7 @@ const HamburgerMenu = styled.div`
     width: 40px;
   }
   visibility: hidden;
-  @media (max-width: 600px) {
+  @media (max-width: ${hamburgerBreakpoint}) {
     visibility: visible;
   }
 `;
@@ -87,7 +89,7 @@ const CloseButton = styled.div`
     width: 40px;
   }
   visibility: hidden;
-  @media (max-width: 600px) {
+  @media (max-width: ${hamburgerBreakpoint}) {
     visibility: visible;
   }
 `;
