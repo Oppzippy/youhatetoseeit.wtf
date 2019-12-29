@@ -122,14 +122,9 @@ class NavBar extends React.Component {
   }
 
   renderExternalLinks(linkData) {
-    let links = linkData.map(link => {
+    let links = linkData.map((link, i) => {
       return (
-        <a
-          href={link.href}
-          rel="noopener noreferrer"
-          target="_blank"
-          key={link.text}
-        >
+        <a href={link.href} rel="noopener noreferrer" target="_blank" key={i}>
           {link.text}
         </a>
       );
