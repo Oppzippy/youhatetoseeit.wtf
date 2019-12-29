@@ -198,13 +198,13 @@ class SnapContainer extends React.Component {
       // offset relative to starting position
       const offset = (target - startY) * sinProgress;
       if (progress < 1) {
-        scrollParent.scrollTo(0, Math.floor(startY + offset));
+        scrollParent.scrollTo(0, startY + offset);
         this.animationID = window.requestAnimationFrame(step);
-        this.scrollY = Math.floor(startY + offset);
+        this.scrollY = startY + offset;
       } else {
         scrollParent.scrollTo(0, target);
+        this.scrollY = this.getScrollParentY(); // may be different from target with zoom that isnt 100%
         this.scrolling = false;
-        this.scrollY = target;
         this.animationID = null;
       }
     };
