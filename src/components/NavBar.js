@@ -40,14 +40,18 @@ const Bar = styled.nav`
 
 const BarSection = styled.section`
   display: flex;
-  & > a,
-  & > span {
+  & > * {
     display: block;
     cursor: pointer;
     text-decoration: none;
     color: inherit;
     padding: 0.8rem;
-    &:hover {
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    font-weight: inherit;
+    &:hover,
+    &:focus {
       background-color: var(--bg-color-dark-2);
     }
   }
@@ -102,15 +106,16 @@ class NavBar extends React.Component {
   renderInternalLinks(linkData) {
     let links = linkData.map((link, i) => {
       return (
-        <span
+        <button
           onClick={() => {
             this.props.scrollFunctions[i]();
             this.setState({ visible: false }); // hide sidebar on mobile
           }}
+          role="link"
           key={link.text}
         >
           {link.text}
-        </span>
+        </button>
       );
     });
     return <BarSection>{links}</BarSection>;
