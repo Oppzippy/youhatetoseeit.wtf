@@ -112,7 +112,7 @@ class NavBar extends React.Component {
             this.setState({ visible: false }); // hide sidebar on mobile
           }}
           role="link"
-          key={link.text}
+          key={i}
         >
           {link.text}
         </button>
