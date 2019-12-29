@@ -27,6 +27,7 @@ class ApplyNow extends React.Component {
               logo {
                 value {
                   publicURL
+                  fileContent
                 }
               }
               title {
@@ -50,12 +51,17 @@ class ApplyNow extends React.Component {
         `}
         render={data => {
           const content = data.cockpitApplyNow;
+          const logo = content.logo.value;
           return (
             <MainContentBox>
               <Section>
                 <h1>
                   <Logo
-                    src={content.logo.value.publicURL}
+                    src={
+                      logo.fileContent
+                        ? `data:image/svg+xml;base64,${btoa(logo.fileContent)}`
+                        : logo.publicURL
+                    }
                     alt={content.title.value}
                   />
                 </h1>
