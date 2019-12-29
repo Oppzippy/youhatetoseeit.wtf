@@ -147,9 +147,7 @@ class NavBar extends React.Component {
                 }
               }
             }
-            allCockpitInternalLinks(
-              sort: { order: ASC, fields: cockpitOrder }
-            ) {
+            allCockpitInternalLinks {
               nodes {
                 text {
                   value
