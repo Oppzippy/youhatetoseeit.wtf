@@ -2,12 +2,12 @@ import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import NavBar from "../components/NavBar.js";
-import ApplyNow from "../components/ApplyNow.js";
-import AboutUs from "../components/AboutUs.js";
-import Raiders from "../components/Raiders.js";
-import { SnapContainer, SnapChild } from "../components/SnapContainer.js";
-import FullscreenVideoBackground from "../components/FullscreenVideoBackground.js";
+import NavBar from "../components/NavBar";
+import ApplyNow from "../components/ApplyNow";
+import AboutUs from "../components/AboutUs";
+import Raiders from "../components/Raiders";
+import { SnapContainer, SnapChild } from "../components/SnapContainer";
+import FullscreenVideoBackground from "../components/FullscreenVideoBackground";
 import favicon from "../images/favicon.ico";
 import "../components/Layout.css";
 

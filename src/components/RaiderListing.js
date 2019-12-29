@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { StreamerConsumer } from "../providers/StreamerProvider.js";
-import ClassColor from "./ClassColor.js";
+import { StreamerConsumer } from "../providers/StreamerProvider";
+import ClassColor from "./ClassColor";
 import wowIcon from "../images/wow-icon.svg";
 import twitchIcon from "../images/twitch-logo.svg";
 

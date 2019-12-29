@@ -1,9 +1,9 @@
 import React from "react";
 import { graphql, StaticQuery } from "gatsby";
 import styled from "styled-components";
-import AllRaiders from "./AllRaiders.js";
-import { StreamerProvider } from "../providers/StreamerProvider.js";
-import MainContentBox from "./MainContentBox.js";
+import AllRaiders from "./AllRaiders";
+import { StreamerProvider } from "../providers/StreamerProvider";
+import MainContentBox from "./MainContentBox";
 
 const Heading = styled.h2`
   font-size: 1.6rem;

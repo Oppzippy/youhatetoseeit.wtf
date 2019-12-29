@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import VideoBackground from "./VideoBackground.js";
+import VideoBackground from "./VideoBackground";
 
 const FullscreenBackground = styled.div`
   width: 100%;

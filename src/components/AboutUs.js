@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
-import MainContentBox from "./MainContentBox.js";
+import MainContentBox from "./MainContentBox";
 
 const DescriptionContentBox = styled.div`
   text-align: left;

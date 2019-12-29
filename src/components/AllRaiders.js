@@ -1,8 +1,8 @@
-import "../polyfill/object-fromEntries.js";
+import "../polyfill/object-fromEntries";
 import React from "react";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
-import RaiderListing from "./RaiderListing.js";
+import RaiderListing from "./RaiderListing";
 
 const RaiderGrid = styled.div`
   width: 75vw;
