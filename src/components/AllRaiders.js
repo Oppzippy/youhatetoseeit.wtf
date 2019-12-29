@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
 import RaiderListing from "./RaiderListing";
+import { RaiderProvider, RaiderContext } from "../providers/RaiderProvider";
 
 const RaiderGrid = styled.div`
   width: 75vw;
@@ -22,11 +23,8 @@ const RaiderGrid = styled.div`
 `;
 
 class AllRaiders extends React.Component {
-  renderRaiders(members, raiderRanks, raiderMetadata) {
+  renderRaiders(raiderMetadata) {
     // Arrays to objects for O(1) lookup
-    const ranksById = Object.fromEntries(
-      raiderRanks.map(rank => [rank.id, rank.name])
-    );
     // keys are ${name}${realm} all lowercase
     const raiderMetadataByName = Object.fromEntries(
       raiderMetadata.map(meta => [
@@ -35,26 +33,25 @@ class AllRaiders extends React.Component {
       ])
     );
 
-    const raiders = members
-      .filter(member => {
-        // TODO see about moving this to the graphql query if possible
-        return ranksById[member.rank];
-      })
-      .map((member, i) => {
-        const memberRank = ranksById[member.rank];
-        const nameIndex =
-          member.character.name.toLowerCase() +
-          member.character.realm.toLowerCase();
-        return (
-          <RaiderListing
-            key={i}
-            rank={memberRank}
-            memberInfo={member}
-            meta={raiderMetadataByName[nameIndex]}
-          />
-        );
-      });
-    return raiders;
+    return (
+      <RaiderContext.Consumer>
+        {raiders => {
+          return raiders.map((raider, i) => {
+            const nameIndex =
+              raider.character.name.toLowerCase() +
+              raider.character.realm.toLowerCase();
+            return (
+              <RaiderListing
+                key={i}
+                rank={raider.rankName}
+                memberInfo={raider}
+                meta={raiderMetadataByName[nameIndex]}
+              />
+            );
+          });
+        }}
+      </RaiderContext.Consumer>
+    );
   }
 
   render() {
@@ -62,20 +59,6 @@ class AllRaiders extends React.Component {
       <StaticQuery
         query={graphql`
           query {
-            allCockpitRaiders {
-              nodes {
-                rank {
-                  value {
-                    rank_id {
-                      value
-                    }
-                    name {
-                      value
-                    }
-                  }
-                }
-              }
-            }
             allCockpitRaiderMeta {
               nodes {
                 twitch {
@@ -89,31 +72,9 @@ class AllRaiders extends React.Component {
                 }
               }
             }
-            allGuildMember(
-              sort: { fields: [rank, character___name], order: ASC }
-            ) {
-              nodes {
-                character {
-                  name
-                  realm
-                  class
-                }
-                rank
-                thumbnail {
-                  publicURL
-                }
-              }
-            }
           }
         `}
         render={data => {
-          const raiderRanks = data.allCockpitRaiders.nodes.map(node => {
-            return {
-              id: node.rank.value.rank_id.value,
-              name: node.rank.value.name.value,
-            };
-          });
-
           const raiderMeta = data.allCockpitRaiderMeta.nodes.map(node => {
             return {
               name: node.name.value,
@@ -123,13 +84,9 @@ class AllRaiders extends React.Component {
           });
 
           return (
-            <RaiderGrid>
-              {this.renderRaiders(
-                data.allGuildMember.nodes,
-                raiderRanks,
-                raiderMeta
-              )}
-            </RaiderGrid>
+            <RaiderProvider>
+              <RaiderGrid>{this.renderRaiders(raiderMeta)}</RaiderGrid>
+            </RaiderProvider>
           );
         }}
       />
