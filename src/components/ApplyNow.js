@@ -59,7 +59,9 @@ class ApplyNow extends React.Component {
                   <Logo
                     src={
                       logo.fileContent
-                        ? `data:image/svg+xml;base64,${btoa(logo.fileContent)}`
+                        ? `data:image/svg+xml;base64,${Buffer.from(
+                            logo.fileContent
+                          ).toString("base64")}`
                         : logo.publicURL
                     }
                     alt={content.title.value}
