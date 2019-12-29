@@ -203,7 +203,8 @@ class SnapContainer extends React.Component {
         this.scrollY = startY + offset;
       } else {
         scrollParent.scrollTo(0, target);
-        this.scrollY = this.getScrollParentY(); // may be different from target with zoom that isnt 100%
+        // may be a decimal with zoom that isnt 100%. target is always an integer.
+        this.scrollY = this.getScrollParentY();
         this.scrolling = false;
         this.animationID = null;
       }

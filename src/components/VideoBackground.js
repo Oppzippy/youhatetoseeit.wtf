@@ -15,6 +15,11 @@ const VideoBackgroundChild = styled.div`
   height: 100%;
 `;
 
+const FullscreenImage = styled.img`
+  width: 100%;
+  min-height: 100%;
+`;
+
 const videos = ["mp4"];
 
 const images = ["jpg", "jpeg", "png", "webp", "gif"];
@@ -35,7 +40,7 @@ class VideoBackground extends React.Component {
       );
     }
     if (images.includes(extension)) {
-      return <img src={this.props.src} alt="" />;
+      return <FullscreenImage src={this.props.src} alt="" />;
     }
   }
 
