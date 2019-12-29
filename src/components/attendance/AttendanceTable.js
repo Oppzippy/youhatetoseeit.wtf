@@ -10,7 +10,9 @@ function getPlayersFromSnapshots(snapshots) {
 }
 
 function createDateHeader(snapshots) {
-  return snapshots.map((snapshot, i) => <th key={i}>{snapshot.date}</th>);
+  return snapshots.map((snapshot, i) => (
+    <th key={i}>{snapshot.date.substring(0, 5)}</th>
+  ));
 }
 
 const statusText = {

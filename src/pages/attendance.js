@@ -1,13 +1,30 @@
 import React, { useState } from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import { Helmet } from "react-helmet";
+import { RaiderProvider, RaiderContext } from "../providers/RaiderProvider";
 import AttendanceTable from "../components/attendance/AttendanceTable";
 import { parseAttendance, renameAlts } from "../parsers/AttendanceParser";
 import "../components/Layout.css";
+import "../components/attendance/Layout.css";
 
 const style = {
   color: "var(--bg-color-dark)",
 };
+
+function filterRaiders(snapshots, raiders) {
+  return snapshots.map(snapshot => {
+    return {
+      ...snapshot,
+      players: snapshot.players.filter(player =>
+        raiders.find(
+          raider =>
+            raider.character.name === player.name &&
+            raider.character.realm === player.realm
+        )
+      ),
+    };
+  });
+}
 
 export default props => {
   const data = useStaticQuery(graphql`
@@ -62,8 +79,24 @@ export default props => {
       <Helmet>
         <title>&lt;You Hate to See It&gt; Attendance</title>
       </Helmet>
-      <input type="checkbox" onInput={console.log} />
-      <AttendanceTable style={style} snapshots={attendance} />
+      <label htmlFor="raiders-only">Raiders Only</label>
+      <input
+        type="checkbox"
+        id="raiders-only"
+        checked={isRaidersOnly}
+        onChange={() => setRaidersOnly(!isRaidersOnly)}
+      />
+      <RaiderProvider>
+        <RaiderContext.Consumer>
+          {raiders => {
+            let snapshots = attendance;
+            if (isRaidersOnly) {
+              snapshots = filterRaiders(snapshots, raiders);
+            }
+            return <AttendanceTable snapshots={snapshots} />;
+          }}
+        </RaiderContext.Consumer>
+      </RaiderProvider>
     </>
   );
 };
