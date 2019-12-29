@@ -62,7 +62,7 @@ export default props => {
       <Helmet>
         <title>&lt;You Hate to See It&gt; Attendance</title>
       </Helmet>
-      <input type="checkbox" onInput={setState()} />
+      <input type="checkbox" onInput={console.log} />
       <AttendanceTable style={style} snapshots={attendance} />
     </>
   );
