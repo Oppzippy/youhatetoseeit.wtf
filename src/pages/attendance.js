@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useStaticQuery, graphql } from "gatsby";
+import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { RaiderProvider, RaiderContext } from "../providers/RaiderProvider";
 import AttendanceTable from "../components/attendance/AttendanceTable";
 import { parseAttendance, renameAlts } from "../parsers/AttendanceParser";
 import "../components/Layout.css";
-import "../components/attendance/Layout.css";
 
-const style = {
-  color: "var(--bg-color-dark)",
-};
+const Style = styled.div`
+  color: var(--bg-color-dark);
+`;
 
 function filterRaiders(snapshots, raiders) {
   return snapshots.map(snapshot => {
@@ -75,7 +75,7 @@ export default props => {
     .map(snapshot => renameAlts(snapshot, altPairs));
 
   return (
-    <>
+    <Style>
       <Helmet>
         <title>&lt;You Hate to See It&gt; Attendance</title>
       </Helmet>
@@ -97,6 +97,6 @@ export default props => {
           }}
         </RaiderContext.Consumer>
       </RaiderProvider>
-    </>
+    </Style>
   );
 };
