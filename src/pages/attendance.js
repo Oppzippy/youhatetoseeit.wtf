@@ -38,16 +38,16 @@ export default props => {
       }
       allCockpitAlts {
         nodes {
-          main_name {
+          mainName {
             value
           }
-          main_realm {
+          mainRealm {
             value
           }
-          alt_name {
+          altName {
             value
           }
-          alt_realm {
+          altRealm {
             value
           }
         }
@@ -58,12 +58,12 @@ export default props => {
   const altPairs = data.allCockpitAlts.nodes.map(node => {
     return {
       main: {
-        name: node.main_name.value,
-        realm: node.main_realm.value,
+        name: node.mainName.value,
+        realm: node.mainRealm.value,
       },
       alt: {
-        name: node.alt_name.value,
-        realm: node.alt_realm.value,
+        name: node.altName.value,
+        realm: node.altRealm.value,
       },
     };
   });

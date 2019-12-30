@@ -10,7 +10,7 @@ const RaiderProvider = props => {
         nodes {
           rank {
             value {
-              rank_id {
+              rankId {
                 value
               }
               name {
@@ -39,7 +39,7 @@ const RaiderProvider = props => {
 
   const raiderRanks = data.allCockpitRaiders.nodes.map(node => {
     return {
-      id: node.rank.value.rank_id.value,
+      id: node.rank.value.rankId.value,
       name: node.rank.value.name.value,
     };
   });

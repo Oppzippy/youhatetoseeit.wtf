@@ -40,10 +40,10 @@ class ApplyNow extends React.Component {
                   }
                 }
               }
-              apply_link {
+              applyLink {
                 value
               }
-              apply_text {
+              applyText {
                 value
               }
             }
@@ -74,8 +74,8 @@ class ApplyNow extends React.Component {
                 />
               </Section>
               <Section>
-                <Button href={content.apply_link.value}>
-                  {content.apply_text.value}
+                <Button href={content.applyLink.value}>
+                  {content.applyText.value}
                 </Button>
               </Section>
             </MainContentBox>

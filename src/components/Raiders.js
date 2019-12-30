@@ -25,18 +25,13 @@ class Raiders extends React.Component {
                   }
                 }
               }
-              cockpitApiKeys {
-                twitch_client_id {
-                  value
-                }
-              }
             }
           `}
           render={data => {
             const streamers = new Set(
               data.allCockpitRaiderMeta.nodes.map(node => node.twitch.value)
             );
-            const clientId = data.cockpitApiKeys.twitch_client_id.value;
+            const clientId = process.env.GATSBY_TWITCH_CLIENT_ID;
             return (
               <StreamerProvider streamers={streamers} twitchClientId={clientId}>
                 <AllRaiders />
