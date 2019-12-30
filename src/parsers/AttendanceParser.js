@@ -14,7 +14,7 @@ function parseAttendance(importString) {
   const entries = importString.split(";");
   const [date, ...rawAttendance] = entries;
   return {
-    date,
+    date: new Date(date),
     players: rawAttendance.map(parseEntry),
   };
 }

@@ -9,6 +9,14 @@ import "../components/Layout.css";
 
 const Style = styled.div`
   color: var(--bg-color-dark);
+  background-color: var(--bg-color-light);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  min-height: 100vh;
 `;
 
 function filterRaiders(snapshots, raiders) {
@@ -25,6 +33,20 @@ function filterRaiders(snapshots, raiders) {
     };
   });
 }
+
+const Label = styled.label`
+  font-size: 1.2rem;
+  margin-right: 10px;
+`;
+
+const PaddedContainer = styled.main`
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 4px 4px 4px var(--shadow-color);
+  width: 90%;
+  height: 90vh;
+`;
 
 export default props => {
   const data = useStaticQuery(graphql`
@@ -79,24 +101,28 @@ export default props => {
       <Helmet>
         <title>&lt;You Hate to See It&gt; Attendance</title>
       </Helmet>
-      <label htmlFor="raiders-only">Raiders Only</label>
-      <input
-        type="checkbox"
-        id="raiders-only"
-        checked={isRaidersOnly}
-        onChange={() => setRaidersOnly(!isRaidersOnly)}
-      />
-      <RaiderProvider>
-        <RaiderContext.Consumer>
-          {raiders => {
-            let snapshots = attendance;
-            if (isRaidersOnly) {
-              snapshots = filterRaiders(snapshots, raiders);
-            }
-            return <AttendanceTable snapshots={snapshots} />;
-          }}
-        </RaiderContext.Consumer>
-      </RaiderProvider>
+      <div>
+        <Label htmlFor="raiders-only">Raiders Only</Label>
+        <input
+          type="checkbox"
+          id="raiders-only"
+          checked={isRaidersOnly}
+          onChange={() => setRaidersOnly(!isRaidersOnly)}
+        />
+      </div>
+      <PaddedContainer>
+        <RaiderProvider>
+          <RaiderContext.Consumer>
+            {raiders => {
+              let snapshots = attendance;
+              if (isRaidersOnly) {
+                snapshots = filterRaiders(snapshots, raiders);
+              }
+              return <AttendanceTable snapshots={snapshots} />;
+            }}
+          </RaiderContext.Consumer>
+        </RaiderProvider>
+      </PaddedContainer>
     </Style>
   );
 };

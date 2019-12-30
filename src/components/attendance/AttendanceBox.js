@@ -9,10 +9,13 @@ const colors = {
   4: "#BFFF90",
 };
 
-const AttendanceBox = styled.td`
-  width: 50px;
-  height: 50px;
+const AttendanceBox = styled.div`
+  width: 100%;
+  height: 100%;
   background-color: ${props => colors[props.status || 0]};
+  grid-column: ${props => props.column};
+  grid-row: ${props => props.row};
+  border: 1px solid black;
 `;
 
 export default AttendanceBox;
