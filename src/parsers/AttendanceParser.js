@@ -40,5 +40,20 @@ function renameAlts(snapshot, pairs) {
   };
 }
 
+function filterRaiders(snapshots, raiders) {
+  return snapshots.map(snapshot => {
+    return {
+      ...snapshot,
+      players: snapshot.players.filter(player =>
+        raiders.find(
+          raider =>
+            raider.character.name === player.name &&
+            raider.character.realm === player.realm
+        )
+      ),
+    };
+  });
+}
+
 export default parseAttendance;
-export { parseAttendance, renameAlts };
+export { parseAttendance, renameAlts, filterRaiders };

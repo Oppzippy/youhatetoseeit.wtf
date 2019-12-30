@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const colors = {
@@ -9,7 +10,30 @@ const colors = {
   4: "#BFFF90",
 };
 
-const AttendanceBox = styled.div`
+const statusText = {
+  // TODO dont hardcode
+  "-1": "Didn't join yet",
+  0: "Absent",
+  1: "Present",
+  2: "Benched",
+  3: "Tardy",
+  4: "Not Zoned In",
+};
+
+let AttendanceBox = props => {
+  const { player, snapshot } = props;
+  const status = props.status ?? player.status;
+  let title = `${snapshot.date.toLocaleDateString()}
+${player.name}
+${statusText[status]}`;
+
+  if (player && player.zone) {
+    title += `\n${player.zone}`;
+  }
+  return <div title={title} {...props}></div>;
+};
+
+AttendanceBox = styled(AttendanceBox)`
   width: 100%;
   height: 100%;
   background-color: ${props => colors[props.status || 0]};

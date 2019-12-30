@@ -1,41 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import AttendanceBox from "./AttendanceBox";
-
-const Table = styled.div`
-  display: grid;
-  grid-template-rows: 2em repeat(${props => props.rows}, 50px);
-  grid-template-columns: 10em repeat(${props => props.columns}, 50px);
-  grid-row-gap: 2px;
-  background-color: #fff;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-`;
-
-const TopHeader = styled.div`
-  grid-row: 1;
-  background-color: inherit;
-  position: sticky;
-  top: 0;
-`;
-
-const LeftHeader = styled.div`
-  grid-column: 1;
-  background-color: inherit;
-  position: sticky;
-  left: 0;
-`;
-
-const TopLeftHeader = styled.div`
-  z-index: 1;
-  grid-column: 1;
-  grid-row: 1;
-  background-color: inherit;
-  position: sticky;
-  left: 0;
-  top: 0;
-`;
+import {
+  Table,
+  TopHeader,
+  LeftHeader,
+  TopLeftHeader,
+} from "./AttendanceTableLayout";
 
 function getPlayersFromSnapshot(snapshot) {
   return snapshot.players.map(player => player.name);
@@ -61,16 +31,6 @@ function createPlayerHeader(players) {
   return players.map((player, i) => <LeftHeader key={i}>{player}</LeftHeader>);
 }
 
-const statusText = {
-  // TODO dont hardcode
-  "-1": "Didn't join yet",
-  0: "Absent",
-  1: "Present",
-  2: "Benched",
-  3: "Tardy",
-  4: "Not Zoned In",
-};
-
 function createAttendanceBoxRow(playerName, playerIndex) {
   let foundOne = false;
   return (snapshot, snapshotIndex) => {
@@ -79,21 +39,15 @@ function createAttendanceBoxRow(playerName, playerIndex) {
       foundOne = true;
     }
     const status = foundOne ? (player ? player.status : 0) : -1;
-    let title = `${snapshot.date.toLocaleDateString()}
-${playerName}
-${statusText[status]}`;
-
-    if (player) {
-      title += `\n${player.zone || "Unknown Zone"}`;
-    }
 
     return (
       <AttendanceBox
+        player={player || { name: playerName }}
+        snapshot={snapshot}
+        status={status}
         key={`${playerName}${snapshotIndex}`}
         column={snapshotIndex + 2}
         row={playerIndex + 2}
-        status={status}
-        title={title}
       />
     );
   };
