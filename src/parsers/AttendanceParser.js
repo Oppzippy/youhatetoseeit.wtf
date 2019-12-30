@@ -1,12 +1,9 @@
-import raidZones from "./RaidZones";
+import playerSerializer from "../helpers/PlayerSerializer";
 
+// private helper
 function parseEntry(entry) {
-  let [fullName, status, zone] = entry.split("`");
+  const [fullName, status, zone] = entry.split("`");
   const [name, realm] = fullName.split("-");
-
-  if (status === "1" && !raidZones.has(zone)) {
-    status = 4;
-  }
 
   return {
     name,
@@ -16,80 +13,92 @@ function parseEntry(entry) {
   };
 }
 
-function parseAttendance(importString) {
+// private helper
+function parseAttendanceStringPartial(importString) {
   const entries = importString.split(";");
   const [date, ...rawAttendance] = entries;
   return {
-    date: new Date(date),
+    date,
     players: rawAttendance.map(parseEntry),
   };
 }
 
-function indexPairs(pairs) {
-  const map = new Map();
-  pairs.forEach(pair => {
-    let key = pair.alt.name.toLowerCase();
-    if (pair.alt.realm) {
-      key += `-${pair.alt.realm.toLowerCase()}`;
-    }
-    map[key] = pair.main;
-  });
-  return map;
+// public, use to pass data to parseAttendance
+// Shapes data but does not perform any lossy operations
+function parseAttendanceString(importString) {
+  const start = parseAttendanceStringPartial(importString.start);
+  const afterBreak = parseAttendanceStringPartial(importString.afterBreak);
+  return { start, afterBreak };
 }
 
-function renameAlts(snapshot, pairs) {
-  pairs = indexPairs(pairs);
-  const newPlayers = snapshot.players.map(player => {
-    const { name, realm } = player;
-    const main =
-      pairs[`${name.toLowerCase()}-${realm.toLowerCase()}`] ?? pairs[name];
-    if (main) {
-      return {
-        ...player,
-        ...main,
-      };
-    }
-    return player;
+// private helper
+function transformPlayerInfo(players, { start, afterBreak }) {
+  const newPlayers = players.map(({ name, realm }) => {
+    const playerFromStart = start.players.find(
+      p => p.name === name && p.realm === realm
+    );
+    const playerAfterBreak = afterBreak.players.find(
+      p => p.name === name && p.realm === realm
+    );
+    return {
+      name: name,
+      realm: realm,
+      online: !!playerFromStart || !!playerAfterBreak,
+      tardy: !playerFromStart,
+      benched:
+        (playerFromStart && playerFromStart.status === "2") ||
+        (playerAfterBreak && playerAfterBreak.status === "2"),
+    };
+  });
+
+  return { date: new Date(start.date), players: newPlayers };
+}
+
+// public, parses attendance
+// TODO instead of returning an array of players, return a map
+function parseAttendance(snapshots) {
+  let players = getPlayersFromSnapshots(snapshots);
+  players = players.sort((a, b) => a.name.localeCompare(b.name));
+  const seenPlayers = new Set();
+  const attendance = snapshots.map(snapshot => {
+    const newSnapshot = transformPlayerInfo(players, snapshot);
+    newSnapshot.players = newSnapshot.players.map(player => {
+      if (!player.online && !seenPlayers.has(playerSerializer(player))) {
+        return {
+          ...player,
+          ignore: true,
+        };
+      }
+      return player;
+    });
+    newSnapshot.players.forEach(player => {
+      if (player.online) {
+        seenPlayers.add(playerSerializer(player));
+      }
+    });
+    return newSnapshot;
   });
   return {
-    ...snapshot,
-    players: newPlayers,
+    players,
+    snapshots: attendance,
   };
 }
 
-function indexRaiders(raiders) {
-  const names = raiders.map(
-    raider =>
-      `${raider.character.name.toLowerCase()}-${raider.character.realm.toLowerCase()}`
-  );
-  return new Set(names);
-}
-
-function filterRaiders(snapshots, raiders) {
-  raiders = indexRaiders(raiders);
-  return snapshots.map(snapshot => {
-    return {
-      ...snapshot,
-      players: snapshot.players.filter(player =>
-        raiders.has(
-          `${player.name.toLowerCase()}-${player.realm.toLowerCase()}`
-        )
-      ),
-    };
-  });
-}
-
-function getPlayersFromSnapshot(snapshot) {
-  return snapshot.players.map(player =>
-    JSON.stringify({ name: player.name, realm: player.realm })
-  );
-}
-
 function getPlayersFromSnapshots(snapshots) {
-  return [
-    ...new Set(snapshots.map(getPlayersFromSnapshot).flat()),
-  ].map(player => JSON.parse(player));
+  // Add players to a map to efficiently keep track of already spotted players
+  const players = new Map();
+  const addPlayer = player => players.set(playerSerializer(player), player);
+  snapshots.forEach(snapshot => {
+    const { start, afterBreak } = snapshot;
+    start.players.forEach(addPlayer);
+    afterBreak.players.forEach(addPlayer);
+  });
+  // Whitelist name and realm fields
+  return [...players.values()].map(player => ({
+    name: player.name,
+    realm: player.realm,
+  }));
 }
 
 export default parseAttendance;
-export { parseAttendance, renameAlts, filterRaiders, getPlayersFromSnapshots };
+export { parseAttendanceString, parseAttendance, getPlayersFromSnapshots };

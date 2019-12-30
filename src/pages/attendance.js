@@ -8,7 +8,7 @@ import {
   AttendanceContext,
 } from "../providers/AttendanceProvider";
 import AttendanceTable from "../components/attendance/AttendanceTable";
-import { filterRaiders } from "../parsers/AttendanceParser";
+import { filterRaiders } from "../helpers/AttendanceHelpers";
 import "../components/Layout.css";
 
 const Style = styled.div`
@@ -62,11 +62,14 @@ export default props => {
               {raiders => (
                 <AttendanceContext.Consumer>
                   {attendance => {
-                    let snapshots = attendance;
+                    let filteredAttendance = attendance;
                     if (isRaidersOnly) {
-                      snapshots = filterRaiders(snapshots, raiders);
+                      filteredAttendance = filterRaiders(
+                        filteredAttendance,
+                        raiders
+                      );
                     }
-                    return <AttendanceTable snapshots={snapshots} />;
+                    return <AttendanceTable attendance={filteredAttendance} />;
                   }}
                 </AttendanceContext.Consumer>
               )}

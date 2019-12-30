@@ -4,96 +4,74 @@ import { getPlayersFromSnapshots } from "../../parsers/AttendanceParser";
 import ParseColor from "../ParseColor";
 import playerSerializer from "../../helpers/PlayerSerializer";
 
-function groupSnapshotsByDate(snapshots) {
-  const newSnapshots = [[]];
-  snapshots.forEach(snapshot => {
-    const current = newSnapshots[newSnapshots.length - 1];
-    if (
-      current.length === 0 ||
-      current[current.length - 1].date.getTime() === snapshot.date.getTime()
-    ) {
-      current.push(snapshot);
-    } else {
-      newSnapshots.push([snapshot]);
-    }
-  });
-  return newSnapshots;
-}
-
-function countPresent(snapshots) {
+function getStats(attendance, condition) {
   const scores = new Map();
-  const playerSet = new Set();
-  const snapshotsByDate = groupSnapshotsByDate(snapshots);
-  const step = 1 / snapshotsByDate.length;
-  snapshotsByDate.forEach((group, i) => {
-    const [snapshot] = group;
+  const stepSizes = new Map();
+  attendance.snapshots.forEach((snapshot, i) =>
     snapshot.players.forEach(player => {
+      if (player.ignore) return;
       const key = playerSerializer(player);
-      if (playerSet.has(key)) {
-        scores[key] = scores[key] + step;
-      } else {
-        playerSet.add(key);
-        scores[key] = (i + 1) * step;
+      let step = stepSizes.get(key);
+      if (!step) {
+        step = 1 / (attendance.snapshots.length - i);
+        stepSizes.set(key, step);
       }
-    });
-  });
+      let newScore = scores.get(key) ?? 0;
+      if (condition(player)) {
+        newScore += step;
+      }
+      scores.set(key, newScore);
+    })
+  );
   return scores;
-}
-
-function countTardy(snapshots) {
-  const scores = new Map();
-  const snapshotsByDate = groupSnapshotsByDate(snapshots);
-  const step = 1 / snapshotsByDate.length;
-  snapshotsByDate.map(group => {
-    const players = getPlayersFromSnapshots(group);
-    players.forEach(player => {
-      const key = playerSerializer(player);
-      scores[key] = (scores[key] ?? 0) + step;
-    });
-  });
-  return scores;
-}
-
-function getPlayerStats(snapshots) {
-  const players = getPlayersFromSnapshots(snapshots);
-  const present = countPresent(snapshots);
-  const tardy = countTardy(snapshots);
-  return players.map(player => ({
-    ...player,
-    present: present[playerSerializer(player)],
-    tardy: tardy[playerSerializer(player)],
-  }));
 }
 
 export default props => {
-  const stats = getPlayerStats(props.snapshots).sort((a, b) =>
-    a.name.localeCompare(b.name)
+  const showedUp = getStats(props.attendance, player => player.online);
+  const present = getStats(
+    props.attendance,
+    player => player.online && !player.tardy
   );
+  const tardy = getStats(
+    props.attendance,
+    player => player.online && player.tardy
+  );
+  const benched = getStats(
+    props.attendance,
+    player => player.online && player.benched
+  );
+  const stats = [];
   return (
     <table>
       <thead>
         <tr>
           <th>Player</th>
+          <th>Showed Up</th>
           <th>Present</th>
           <th>Tardy</th>
-          <th>Grouped</th>
-          <th>Zoned</th>
+          <th>Benched</th>
         </tr>
       </thead>
       <tbody>
-        {stats.map(player => (
-          <tr>
+        {props.attendance.players.map((player, i) => (
+          <tr key={i}>
             <td>{player.name}</td>
             <td>
-              <ParseColor parse={player.present}>
-                {Math.round(player.present * 100)}%
+              <ParseColor parse={showedUp.get(playerSerializer(player))}>
+                {Math.round(showedUp.get(playerSerializer(player)) * 100)}%
               </ParseColor>
             </td>
             <td>
-              <ParseColor parse={player.tardy}>
-                {Math.round(player.tardy * 100)}%
+              <ParseColor parse={present.get(playerSerializer(player))}>
+                {Math.round(present.get(playerSerializer(player)) * 100)}%
               </ParseColor>
             </td>
+            <td>
+              <ParseColor parse={1 - tardy.get(playerSerializer(player))}>
+                {Math.round(tardy.get(playerSerializer(player)) * 100)}%
+              </ParseColor>
+            </td>
+            <td>{Math.round(benched.get(playerSerializer(player)) * 100)}%</td>
           </tr>
         ))}
       </tbody>

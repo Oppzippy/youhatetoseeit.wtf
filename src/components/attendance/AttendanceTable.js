@@ -26,46 +26,34 @@ function createPlayerHeader(players) {
   ));
 }
 
-function createAttendanceBoxRow(playerName, playerIndex) {
-  let foundOne = false;
-  return (snapshot, snapshotIndex) => {
-    const player = snapshot.players.find(
-      player => player.name === playerName.name
-    );
-    if (player) {
-      foundOne = true;
-    }
-    const status = foundOne ? (player ? player.status : 0) : -1;
-
-    return (
-      <AttendanceBox
-        player={player || { name: playerName.name }}
-        snapshot={snapshot}
-        status={status}
-        key={`${playerName.name}${snapshotIndex}`}
-        column={snapshotIndex + 2}
-        row={playerIndex + 2}
-      />
-    );
-  };
-}
-
 function createAttendanceBoxes(snapshots, players) {
-  const boxes = players.map((player, i) =>
-    snapshots.map(createAttendanceBoxRow(player, i))
+  const boxes = players.map((player, playerIndex) =>
+    snapshots.map((snapshot, snapshotIndex) => {
+      const playerAttendance = snapshot.players.find(
+        p => p.name === player.name && p.realm === player.realm
+      );
+
+      return (
+        <AttendanceBox
+          key={`${playerAttendance.name}-${snapshotIndex}-${playerIndex}`}
+          player={playerAttendance}
+          snapshot={snapshot}
+          column={snapshotIndex + 2}
+          row={playerIndex + 2}
+        />
+      );
+    })
   );
   return boxes;
 }
 
 export default props => {
-  const players = getPlayersFromSnapshots(props.snapshots).sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  const rows = createAttendanceBoxes(props.snapshots, players);
+  const { players, snapshots } = props.attendance;
+  const rows = createAttendanceBoxes(snapshots, players);
   return (
-    <Table columns={props.snapshots.length} rows={rows.length}>
+    <Table columns={snapshots.length} rows={rows.length}>
       <TopLeftHeader>Player</TopLeftHeader>
-      {createDateHeader(props.snapshots)}
+      {createDateHeader(snapshots)}
       {createPlayerHeader(players)}
       {rows.flat()}
     </Table>

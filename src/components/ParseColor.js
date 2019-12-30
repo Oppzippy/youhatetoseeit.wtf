@@ -34,6 +34,7 @@ function getColor(parse) {
 
 const ParseColor = styled.span`
   color: ${props => getColor(props.parse)};
+  filter: brightness(0.8);
 `;
 
 export default ParseColor;

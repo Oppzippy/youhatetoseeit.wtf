@@ -32,17 +32,41 @@ const AttendanceElement = styled.div.attrs(props => ({
   border: 1px solid black;
 `;
 
+function getStatusId(player) {
+  const { online, tardy, benched, ignore } = player;
+  if (ignore) {
+    return -1;
+  }
+  if (online) {
+    if (benched) {
+      return 2;
+    }
+    if (tardy) {
+      return 3;
+    }
+    return 1;
+  }
+  return 0;
+}
+
 const AttendanceBox = props => {
   const { player, snapshot } = props;
-  const status = props.status ?? player.status;
-  let title = `${snapshot.date.toLocaleDateString()}
-${player.name}
-${statusText[status]}`;
+  const status = getStatusId(player);
 
-  if (player && player.zone) {
+  let title = `${snapshot.date.toLocaleDateString()}\n${player.name}\n${
+    statusText[status]
+  }`;
+
+  if (player.zone) {
     title += `\n${player.zone}`;
   }
-  return <AttendanceElement title={title} {...props}></AttendanceElement>;
+  return (
+    <AttendanceElement
+      status={status}
+      title={title}
+      {...props}
+    ></AttendanceElement>
+  );
 };
 
 export default AttendanceBox;

@@ -1,6 +1,10 @@
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
-import { parseAttendance, renameAlts } from "../parsers/AttendanceParser";
+import {
+  parseAttendance,
+  parseAttendanceString,
+} from "../parsers/AttendanceParser";
+import { mergeAlts } from "../helpers/AttendanceHelpers";
 
 const AttendanceContext = React.createContext();
 
@@ -9,7 +13,10 @@ const AttendanceProvider = props => {
     query {
       allCockpitAttendance {
         nodes {
-          data {
+          start {
+            value
+          }
+          afterBreak {
             value
           }
         }
@@ -45,13 +52,15 @@ const AttendanceProvider = props => {
       },
     };
   });
-  const attendanceStrings = data.allCockpitAttendance.nodes.map(
-    node => node.data.value
-  );
-  const attendance = attendanceStrings
-    .map(parseAttendance)
-    .map(snapshot => renameAlts(snapshot, altPairs));
-
+  const attendanceStrings = data.allCockpitAttendance.nodes.map(node => ({
+    start: node.start.value,
+    afterBreak: node.afterBreak.value,
+  }));
+  const rawAttendance = attendanceStrings
+    .map(parseAttendanceString)
+    .map(mergeAlts(altPairs));
+  const attendance = parseAttendance(rawAttendance);
+  console.log(attendance);
   return (
     <AttendanceContext.Provider value={attendance}>
       {props.children}

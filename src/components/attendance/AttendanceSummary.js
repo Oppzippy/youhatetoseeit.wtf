@@ -9,14 +9,14 @@ const Container = styled.div`
 `;
 
 export default props => {
-  let snapshots = props.attendance;
+  let { attendance } = props;
   if (false) {
-    snapshots = filterRaiders(snapshots, props.raiders);
+    attendance = filterRaiders(attendance, props.raiders);
   }
   return (
     <Container>
       <ContentBox>
-        <AttendanceSummaryTable snapshots={snapshots} />
+        <AttendanceSummaryTable attendance={attendance} />
       </ContentBox>
     </Container>
   );
