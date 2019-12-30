@@ -20,7 +20,19 @@ const statusText = {
   4: "Not Zoned In",
 };
 
-let AttendanceBox = props => {
+const AttendanceElement = styled.div.attrs(props => ({
+  style: {
+    gridRow: props.row,
+    gridColumn: props.column,
+  },
+}))`
+  width: 100%;
+  height: 100%;
+  background-color: ${props => colors[props.status || 0]};
+  border: 1px solid black;
+`;
+
+const AttendanceBox = props => {
   const { player, snapshot } = props;
   const status = props.status ?? player.status;
   let title = `${snapshot.date.toLocaleDateString()}
@@ -30,16 +42,7 @@ ${statusText[status]}`;
   if (player && player.zone) {
     title += `\n${player.zone}`;
   }
-  return <div title={title} {...props}></div>;
+  return <AttendanceElement title={title} {...props}></AttendanceElement>;
 };
-
-AttendanceBox = styled(AttendanceBox)`
-  width: 100%;
-  height: 100%;
-  background-color: ${props => colors[props.status || 0]};
-  grid-column: ${props => props.column};
-  grid-row: ${props => props.row};
-  border: 1px solid black;
-`;
 
 export default AttendanceBox;
