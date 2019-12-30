@@ -6,14 +6,7 @@ import {
   LeftHeader,
   TopLeftHeader,
 } from "./AttendanceTableLayout";
-
-function getPlayersFromSnapshot(snapshot) {
-  return snapshot.players.map(player => player.name);
-}
-
-function getPlayersFromSnapshots(snapshots) {
-  return [...new Set(snapshots.map(getPlayersFromSnapshot).flat())];
-}
+import { getPlayersFromSnapshots } from "../../parsers/AttendanceParser";
 
 function createDateHeader(snapshots) {
   const dateOptions = {
@@ -28,13 +21,17 @@ function createDateHeader(snapshots) {
 }
 
 function createPlayerHeader(players) {
-  return players.map((player, i) => <LeftHeader key={i}>{player}</LeftHeader>);
+  return players.map((player, i) => (
+    <LeftHeader key={i}>{player.name}</LeftHeader>
+  ));
 }
 
 function createAttendanceBoxRow(playerName, playerIndex) {
   let foundOne = false;
   return (snapshot, snapshotIndex) => {
-    const player = snapshot.players.find(player => player.name === playerName);
+    const player = snapshot.players.find(
+      player => player.name === playerName.name
+    );
     if (player) {
       foundOne = true;
     }
@@ -42,10 +39,10 @@ function createAttendanceBoxRow(playerName, playerIndex) {
 
     return (
       <AttendanceBox
-        player={player || { name: playerName }}
+        player={player || { name: playerName.name }}
         snapshot={snapshot}
         status={status}
-        key={`${playerName}${snapshotIndex}`}
+        key={`${playerName.name}${snapshotIndex}`}
         column={snapshotIndex + 2}
         row={playerIndex + 2}
       />
@@ -54,15 +51,15 @@ function createAttendanceBoxRow(playerName, playerIndex) {
 }
 
 function createAttendanceBoxes(snapshots, players) {
-  const boxes = players.map((playerName, i) =>
-    snapshots.map(createAttendanceBoxRow(playerName, i))
+  const boxes = players.map((player, i) =>
+    snapshots.map(createAttendanceBoxRow(player, i))
   );
   return boxes;
 }
 
 export default props => {
   const players = getPlayersFromSnapshots(props.snapshots).sort((a, b) =>
-    a.localeCompare(b)
+    a.name.localeCompare(b.name)
   );
   const rows = createAttendanceBoxes(props.snapshots, players);
   return (
