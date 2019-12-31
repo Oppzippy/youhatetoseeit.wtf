@@ -37,12 +37,21 @@ const Container = styled.main`
   background-color: var(--bg-color-light);
   width: 100%;
   min-height: 100vh;
+  @media (max-width: 1200px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Section = styled.div`
   width: ${props => 100 / (props.columns ?? 2)}%;
   float: left;
   padding: 5%;
+  @media (max-width: 1200px) {
+    width: auto;
+    float: none;
+  }
 `;
 
 const Box = styled.section`
