@@ -16,19 +16,14 @@ const NavLink = styled(Link)`
     color: inherit;
     text-decoration: none;
     padding: 10px;
-  }
-  &:hover {
-    background-color: var(--bg-color-dark-2);
-  }
-  &:link,
-  &:visited {
-    ${props =>
-      props.selected
-        ? {
-            color: "var(--text-color-dark)",
-            backgroundColor: "var(--bg-color-light)",
-          }
-        : ""}
+
+    &:hover {
+      background-color: var(--bg-color-dark-2);
+    }
+    &[data-selected="true"] {
+      color: var(--text-color-dark);
+      background-color: var(--bg-color-light);
+    }
   }
 `;
 
@@ -65,7 +60,7 @@ export default props => {
     <>
       <Nav>
         {props.nav.map((link, i) => (
-          <NavLink to={link.href} selected={link.selected} key={i}>
+          <NavLink to={link.href} data-selected={link.selected} key={i}>
             {link.text}
           </NavLink>
         ))}
