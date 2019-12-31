@@ -1,2 +1,3 @@
 # Redirect default Netlify subdomain to primary domain
-https://youhatetoseeit.netlify.com* https://youhatetoseeit.wtf 301
+https://youhatetoseeit.netlify.com https://youhatetoseeit.wtf 301
+https://youhatetoseeit.netlify.com/* https://youhatetoseeit.wtf 301
