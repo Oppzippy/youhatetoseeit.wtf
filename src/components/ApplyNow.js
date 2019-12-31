@@ -1,9 +1,11 @@
+// Libraries
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import Button from "./Button";
-import MainContentBox from "./MainContentBox";
+// Components
+import Button from "components/Button";
+import MainContentBox from "components/MainContentBox";
 
 const Section = styled.section`
   text-align: center;

@@ -1,15 +1,16 @@
+// Libraries
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import NavBar from "../components/NavBar";
-import ApplyNow from "../components/ApplyNow";
-import AboutUs from "../components/AboutUs";
-import Raiders from "../components/Raiders";
-import { SnapContainer, SnapChild } from "../components/SnapContainer";
-import FullscreenVideoBackground from "../components/FullscreenVideoBackground";
-import favicon from "../images/favicon.ico";
-import "../components/Layout.css";
+// Components
+import NavBar from "components/NavBar";
+import ApplyNow from "components/ApplyNow";
+import AboutUs from "components/AboutUs";
+import Raiders from "components/Raiders";
+import { SnapContainer, SnapChild } from "components/SnapContainer";
+import FullscreenVideoBackground from "components/FullscreenVideoBackground";
+import "components/Layout.css";
 
 const FullscreenContainer = styled.div`
   height: 100vh;
@@ -55,7 +56,6 @@ class Index extends React.Component {
             name="description"
             content="World of Warcraft mythic raiding guild on Illidan-US"
           />
-          <link rel="icon" href={favicon} />
         </Helmet>
         <StaticQuery
           query={graphql`

@@ -1,9 +1,12 @@
-import "../polyfill/object-fromEntries";
+// Libraries
 import React from "react";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
-import RaiderListing from "./RaiderListing";
-import { RaiderProvider, RaiderContext } from "../providers/RaiderProvider";
+// Helpers
+import "../polyfill/object-fromEntries";
+// Components
+import RaiderListing from "components/RaiderListing";
+import { RaiderProvider, RaiderContext } from "providers/RaiderProvider";
 
 const RaiderGrid = styled.div`
   width: 75vw;

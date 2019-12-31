@@ -1,15 +1,18 @@
+// Libraries
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { RaiderProvider, RaiderContext } from "../../providers/RaiderProvider";
+// Helpers
+import { RaiderProvider, RaiderContext } from "providers/RaiderProvider";
 import {
   AttendanceProvider,
   AttendanceContext,
-} from "../../providers/AttendanceProvider";
-import AttendanceTable from "../../components/attendance/AttendanceTable";
-import { filterRaiders } from "../../helpers/AttendanceHelpers";
-import ColumnLayout from "../../components/layouts/Columns";
-import "../../components/Layout.css";
-import Label from "../../components/styles/Label";
+} from "providers/AttendanceProvider";
+import { filterRaiders } from "helpers/AttendanceHelpers";
+// Components
+import AttendanceTable from "components/attendance/AttendanceTable";
+import ColumnLayout from "components/layouts/Columns";
+import Label from "components/styles/Label";
+import "components/Layout.css";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);

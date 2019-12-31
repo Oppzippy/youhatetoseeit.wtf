@@ -1,10 +1,12 @@
+// Libraries
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
+// Helpers
 import {
   parseAttendance,
   parseAttendanceString,
-} from "../parsers/AttendanceParser";
-import { mergeAlts } from "../helpers/AttendanceHelpers";
+} from "parsers/AttendanceParser";
+import { mergeAlts } from "helpers/AttendanceHelpers";
 
 const AttendanceContext = React.createContext();
 

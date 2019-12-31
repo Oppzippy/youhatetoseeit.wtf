@@ -1,7 +1,10 @@
+// Libraries
 import React, { useState } from "react";
-import { filterRaiders } from "../../helpers/AttendanceHelpers";
-import AttendanceSummaryTable from "./AttendanceSummaryTable";
-import Label from "../styles/Label";
+// Helpers
+import { filterRaiders } from "helpers/AttendanceHelpers";
+// Components
+import AttendanceSummaryTable from "components/attendance/AttendanceSummaryTable";
+import Label from "components/styles/Label";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);

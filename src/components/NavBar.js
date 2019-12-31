@@ -1,8 +1,10 @@
+// Libraries
 import React from "react";
 import { StaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import hamburger from "../images/icons/menu-24px.svg";
-import doubleArrow from "../images/icons/double_arrow-24px.svg";
+// Images
+import hamburger from "images/icons/menu-24px.svg";
+import doubleArrow from "images/icons/double_arrow-24px.svg";
 
 const hamburgerBreakpoint = "999px";
 

@@ -1,7 +1,10 @@
+// Libraries
 import React, { useState } from "react";
 import styled from "styled-components";
-import ParseColor from "../ParseColor";
-import playerSerializer from "../../helpers/PlayerSerializer";
+// Helpers
+import playerSerializer from "helpers/PlayerSerializer";
+// Components
+import ParseColor from "components/ParseColor";
 
 function getStats(attendance, condition) {
   const scores = new Map();

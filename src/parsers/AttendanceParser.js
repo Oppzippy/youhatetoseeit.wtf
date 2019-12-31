@@ -1,4 +1,4 @@
-import playerSerializer from "../helpers/PlayerSerializer";
+import playerSerializer from "helpers/PlayerSerializer";
 
 // private helper
 function parseEntry(entry) {

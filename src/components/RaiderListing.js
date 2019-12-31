@@ -1,9 +1,12 @@
+// Libraries
 import React from "react";
 import styled from "styled-components";
-import { StreamerConsumer } from "../providers/StreamerProvider";
-import ClassColor from "./ClassColor";
-import wowIcon from "../images/wow-icon.svg";
-import twitchIcon from "../images/twitch-logo.svg";
+// Components
+import { StreamerConsumer } from "providers/StreamerProvider";
+import ClassColor from "components/ClassColor";
+// Images
+import wowIcon from "images/wow-icon.svg";
+import twitchIcon from "images/twitch-logo.svg";
 
 const RaiderBox = styled.div`
   position: relative;

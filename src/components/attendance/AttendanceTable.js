@@ -1,11 +1,13 @@
+// Libraries
 import React from "react";
-import AttendanceBox from "./AttendanceBox";
+// Components
 import {
   Table,
   TopHeader,
   LeftHeader,
   TopLeftHeader,
 } from "./AttendanceTableLayout";
+import AttendanceBox from "components/attendance/AttendanceBox";
 
 function createDateHeader(snapshots) {
   const dateOptions = {

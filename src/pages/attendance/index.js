@@ -1,14 +1,16 @@
+// Libraries
 import React from "react";
 import { Helmet } from "react-helmet";
-import { RaiderProvider, RaiderContext } from "../../providers/RaiderProvider";
+// Helpers
+import { RaiderProvider, RaiderContext } from "providers/RaiderProvider";
 import {
   AttendanceProvider,
   AttendanceContext,
-} from "../../providers/AttendanceProvider";
-import AttendanceSummary from "../../components/attendance/AttendanceSummary";
-import ColumnLayout from "../../components/layouts/Columns";
-
-import "../../components/Layout.css";
+} from "providers/AttendanceProvider";
+// Components
+import AttendanceSummary from "components/attendance/AttendanceSummary";
+import ColumnLayout from "components/layouts/Columns";
+import "components/Layout.css";
 
 export default () => {
   const nav = [

@@ -1,4 +1,4 @@
-import playerSerializer from "./PlayerSerializer";
+import playerSerializer from "helpers/PlayerSerializer";
 
 function indexPlayers(players) {
   const names = players.map(player => playerSerializer(player));
