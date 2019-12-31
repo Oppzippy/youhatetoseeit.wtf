@@ -40,6 +40,7 @@ const Container = styled.main`
 
 const Section = styled.div`
   width: ${props => 100 / (props.columns ?? 2)}%;
+  float: left;
   padding: 5%;
 `;
 
@@ -59,7 +60,7 @@ export default props => {
           </NavLink>
         ))}
       </Nav>
-      <Container>
+      <Container className="clearfix">
         {React.Children.map(props.children, (child, i) => (
           <Section columns={props.columns} key={i}>
             <Box>{child}</Box>

@@ -25,6 +25,12 @@ html {
   color: var(--text-color-light);
 }
 
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
 .header__medium {
   padding: 10px;
 }

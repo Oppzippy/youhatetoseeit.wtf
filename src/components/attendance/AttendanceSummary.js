@@ -11,7 +11,7 @@ export default props => {
     attendance = filterRaiders(attendance, raiders);
   }
   return (
-    <>
+    <div>
       <Label htmlFor="raiders-only">Raiders Only</Label>
       <input
         type="checkbox"
@@ -20,6 +20,6 @@ export default props => {
         onChange={() => setRaidersOnly(!isRaidersOnly)}
       />
       <AttendanceSummaryTable attendance={attendance} />
-    </>
+    </div>
   );
 };
