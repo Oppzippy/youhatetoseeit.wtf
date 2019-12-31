@@ -6,7 +6,6 @@ import {
   LeftHeader,
   TopLeftHeader,
 } from "./AttendanceTableLayout";
-import { getPlayersFromSnapshots } from "../../parsers/AttendanceParser";
 
 function createDateHeader(snapshots) {
   const dateOptions = {

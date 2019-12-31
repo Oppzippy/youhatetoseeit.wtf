@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
 import { RaiderProvider, RaiderContext } from "../../providers/RaiderProvider";
 import {

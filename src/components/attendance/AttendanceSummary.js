@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { filterRaiders } from "../../helpers/AttendanceHelpers";
 import AttendanceSummaryTable from "./AttendanceSummaryTable";
 import Label from "../styles/Label";

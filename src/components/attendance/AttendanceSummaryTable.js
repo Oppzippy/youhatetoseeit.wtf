@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { differenceBy } from "lodash";
-import { getPlayersFromSnapshots } from "../../parsers/AttendanceParser";
 import ParseColor from "../ParseColor";
 import playerSerializer from "../../helpers/PlayerSerializer";
 
@@ -87,7 +85,6 @@ export default props => {
     }
   };
 
-  const stats = [];
   return (
     <Table cellSpacing="0">
       <thead>
