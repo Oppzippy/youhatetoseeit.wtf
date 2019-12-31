@@ -6,7 +6,7 @@ import {
   AttendanceContext,
 } from "../../providers/AttendanceProvider";
 import AttendanceSummary from "../../components/attendance/AttendanceSummary";
-import ColumnLayout from "../../components/layouts/Columns.js";
+import ColumnLayout from "../../components/layouts/Columns";
 
 import "../../components/Layout.css";
 

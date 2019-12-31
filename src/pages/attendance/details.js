@@ -8,13 +8,9 @@ import {
 } from "../../providers/AttendanceProvider";
 import AttendanceTable from "../../components/attendance/AttendanceTable";
 import { filterRaiders } from "../../helpers/AttendanceHelpers";
-import ColumnLayout from "../../components/layouts/Columns.js";
+import ColumnLayout from "../../components/layouts/Columns";
 import "../../components/Layout.css";
-
-const Label = styled.label`
-  font-size: 1.2rem;
-  margin-right: 10px;
-`;
+import Label from "../../components/styles/Label";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);

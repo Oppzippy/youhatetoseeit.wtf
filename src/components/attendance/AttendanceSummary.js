@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { filterRaiders } from "../../parsers/AttendanceParser";
+import { filterRaiders } from "../../helpers/AttendanceHelpers";
 import AttendanceSummaryTable from "./AttendanceSummaryTable";
+import Label from "../styles/Label";
 
 export default props => {
-  let { attendance } = props;
-  if (false) {
-    attendance = filterRaiders(attendance, props.raiders);
+  const [isRaidersOnly, setRaidersOnly] = useState(true);
+  let { attendance, raiders } = props;
+  if (isRaidersOnly) {
+    attendance = filterRaiders(attendance, raiders);
   }
-  return <AttendanceSummaryTable attendance={attendance} />;
+  return (
+    <>
+      <Label for="raiders-only">Raiders Only</Label>
+      <input
+        type="checkbox"
+        id="raiders-only"
+        checked={isRaidersOnly}
+        onClick={() => setRaidersOnly(!isRaidersOnly)}
+      />
+      <AttendanceSummaryTable attendance={attendance} />
+    </>
+  );
 };
