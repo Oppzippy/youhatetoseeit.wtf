@@ -2,8 +2,6 @@
 import React from "react";
 import styled from "styled-components";
 import { StaticQuery, graphql } from "gatsby";
-// Helpers
-import "../polyfill/object-fromEntries";
 // Components
 import RaiderListing from "components/RaiderListing";
 import { RaiderProvider, RaiderContext } from "providers/RaiderProvider";

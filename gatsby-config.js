@@ -12,6 +12,12 @@ module.exports = {
     },
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-polyfill-io`,
+      options: {
+        features: [`Array.prototype.flat`, `Object.fromEntries`],
+      },
+    },
     `gatsby-alias-imports`,
     `gatsby-plugin-react-helmet`,
     {
