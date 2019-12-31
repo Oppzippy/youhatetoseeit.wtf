@@ -44,6 +44,9 @@ export default () => {
             </AttendanceContext.Consumer>
           </RaiderProvider>
         </AttendanceProvider>
+        <div>
+          <h2>TODO overall attendance percents</h2>
+        </div>
       </ColumnLayout>
     </>
   );

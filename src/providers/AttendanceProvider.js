@@ -60,7 +60,6 @@ const AttendanceProvider = props => {
     .map(parseAttendanceString)
     .map(mergeAlts(altPairs));
   const attendance = parseAttendance(rawAttendance);
-  console.log(attendance);
   return (
     <AttendanceContext.Provider value={attendance}>
       {props.children}

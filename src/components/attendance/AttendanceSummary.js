@@ -12,12 +12,12 @@ export default props => {
   }
   return (
     <>
-      <Label for="raiders-only">Raiders Only</Label>
+      <Label htmlFor="raiders-only">Raiders Only</Label>
       <input
         type="checkbox"
         id="raiders-only"
         checked={isRaidersOnly}
-        onClick={() => setRaidersOnly(!isRaidersOnly)}
+        onChange={() => setRaidersOnly(!isRaidersOnly)}
       />
       <AttendanceSummaryTable attendance={attendance} />
     </>
