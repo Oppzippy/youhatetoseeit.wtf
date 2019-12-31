@@ -5,7 +5,7 @@ const Table = styled.div`
   grid-template-rows: 2em repeat(${props => props.rows}, 50px);
   grid-template-columns: 10em repeat(${props => props.columns}, 50px);
   grid-row-gap: 2px;
-  background-color: #fff;
+  background-color: var(--bg-color-light-2);
   overflow: auto;
   width: 100%;
   height: 100%;

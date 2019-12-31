@@ -24,3 +24,7 @@ html {
   font-family: sans-serif;
   color: var(--text-color-light);
 }
+
+.header__medium {
+  padding: 10px;
+}

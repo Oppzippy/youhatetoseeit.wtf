@@ -51,11 +51,13 @@ export default props => {
   const { players, snapshots } = props.attendance;
   const rows = createAttendanceBoxes(snapshots, players);
   return (
-    <Table columns={snapshots.length} rows={rows.length}>
-      <TopLeftHeader>Player</TopLeftHeader>
-      {createDateHeader(snapshots)}
-      {createPlayerHeader(players)}
-      {rows.flat()}
-    </Table>
+    <>
+      <Table columns={snapshots.length} rows={rows.length}>
+        <TopLeftHeader>Player</TopLeftHeader>
+        {createDateHeader(snapshots)}
+        {createPlayerHeader(players)}
+        {rows.flat()}
+      </Table>
+    </>
   );
 };

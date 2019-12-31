@@ -51,6 +51,7 @@ const Table = styled.table`
   }
   th {
     cursor: pointer;
+    user-select: none;
     &:hover {
       background-color: var(--bg-color-light);
     }
