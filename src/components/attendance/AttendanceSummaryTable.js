@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
 import { differenceBy } from "lodash";
 import { getPlayersFromSnapshots } from "../../parsers/AttendanceParser";
 import ParseColor from "../ParseColor";
@@ -26,6 +27,36 @@ function getStats(attendance, condition) {
   return scores;
 }
 
+function getSortedPlayers(stats, stat, reversed) {
+  const reversedMultiplier = reversed ? -1 : 1;
+  stat = stats[stat];
+  if (stat) {
+    // sort by stat
+    return [...stat.entries()]
+      .sort((a, b) => (a[1] - b[1]) * reversedMultiplier)
+      .map(entry => entry[0]);
+  }
+  // sort by player name if stat isn't found
+  const [value] = Object.values(stats);
+  return [...value.keys()].sort(
+    (a, b) => a.localeCompare(b) * reversedMultiplier
+  );
+}
+
+const Table = styled.table`
+  td,
+  th {
+    padding: 5px;
+    border-bottom: 2px solid var(--shadow-color);
+  }
+  th {
+    cursor: pointer;
+    &:hover {
+      background-color: var(--bg-color-light);
+    }
+  }
+`;
+
 export default props => {
   const showedUp = getStats(props.attendance, player => player.online);
   const present = getStats(
@@ -40,41 +71,76 @@ export default props => {
     props.attendance,
     player => player.online && player.benched
   );
+
+  const [sortingBy, setSortingBy] = useState("showedUp");
+  const [isSortingReversed, setSortingReversed] = useState(true);
+
+  const setSorting = type => {
+    setSortingBy(type);
+    setSortingReversed(sortingBy === type ? !isSortingReversed : true);
+  };
+
+  const drawSortingArrow = type => {
+    if (sortingBy === type) {
+      return isSortingReversed ? <span>&darr;</span> : <span>&uarr;</span>;
+    }
+  };
+
   const stats = [];
   return (
-    <table>
+    <Table cellSpacing="0">
       <thead>
         <tr>
-          <th>Player</th>
-          <th>Showed Up</th>
-          <th>Present</th>
-          <th>Tardy</th>
-          <th>Benched</th>
+          <th onClick={() => setSorting("player")}>
+            Player {drawSortingArrow("player")}
+          </th>
+          <th onClick={() => setSorting("showedUp")}>
+            Showed Up {drawSortingArrow("showedUp")}
+          </th>
+          <th onClick={() => setSorting("present")}>
+            Present {drawSortingArrow("present")}
+          </th>
+          <th onClick={() => setSorting("tardy")}>
+            Tardy {drawSortingArrow("tardy")}
+          </th>
+          <th onClick={() => setSorting("benched")}>
+            Benched {drawSortingArrow("benched")}
+          </th>
         </tr>
       </thead>
       <tbody>
-        {props.attendance.players.map((player, i) => (
+        {getSortedPlayers(
+          { showedUp, present, tardy, benched },
+          sortingBy,
+          isSortingReversed
+        ).map((player, i) => (
           <tr key={i}>
-            <td>{player.name}</td>
             <td>
-              <ParseColor parse={showedUp.get(playerSerializer(player))}>
-                {Math.round(showedUp.get(playerSerializer(player)) * 100)}%
+              {
+                props.attendance.players.find(
+                  p => playerSerializer(p) === player
+                ).name
+              }
+            </td>
+            <td>
+              <ParseColor parse={showedUp.get(player)}>
+                {Math.round(showedUp.get(player) * 100)}%
               </ParseColor>
             </td>
             <td>
-              <ParseColor parse={present.get(playerSerializer(player))}>
-                {Math.round(present.get(playerSerializer(player)) * 100)}%
+              <ParseColor parse={present.get(player)}>
+                {Math.round(present.get(player) * 100)}%
               </ParseColor>
             </td>
             <td>
-              <ParseColor parse={1 - tardy.get(playerSerializer(player))}>
-                {Math.round(tardy.get(playerSerializer(player)) * 100)}%
+              <ParseColor parse={1 - tardy.get(player)}>
+                {Math.round(tardy.get(player) * 100)}%
               </ParseColor>
             </td>
-            <td>{Math.round(benched.get(playerSerializer(player)) * 100)}%</td>
+            <td>{Math.round(benched.get(player) * 100)}%</td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
