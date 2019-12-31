@@ -50,8 +50,7 @@ const BarSection = styled.section`
     border: none;
     font-size: inherit;
     font-weight: inherit;
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--bg-color-dark-2);
     }
   }
