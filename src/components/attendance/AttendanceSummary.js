@@ -5,7 +5,15 @@ import AttendanceSummaryTable from "./AttendanceSummaryTable";
 import ContentBox from "../ContentBox";
 
 const Container = styled.div`
-  column-count: 3;
+  column-count: 2;
+  @media (max-width: 1200px) {
+    column-count: 1;
+  }
+`;
+
+const CustomContentBox = styled(ContentBox)`
+  display: flex;
+  justify-content: center;
 `;
 
 export default props => {
@@ -15,9 +23,9 @@ export default props => {
   }
   return (
     <Container>
-      <ContentBox>
+      <CustomContentBox>
         <AttendanceSummaryTable attendance={attendance} />
-      </ContentBox>
+      </CustomContentBox>
     </Container>
   );
 };
