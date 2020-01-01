@@ -4,6 +4,7 @@ module.exports = {
   siteMetadata: {
     title: `You Hate to See It`,
     description: `World of Warcraft mythic raiding guild on Illidan (US)`,
+    cmsUrl: `https://cms.youhatetoseeit.wtf`,
     guild: {
       name: `You Hate to See It`,
       realm: `Illidan`,

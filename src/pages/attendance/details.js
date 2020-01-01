@@ -40,6 +40,10 @@ export default props => {
               {raiders => (
                 <AttendanceContext.Consumer>
                   {attendance => {
+                    if (attendance.error) {
+                      return <h3>{attendance.error}</h3>;
+                    }
+
                     let filteredAttendance = attendance;
                     if (isRaidersOnly) {
                       filteredAttendance = filterRaiders(

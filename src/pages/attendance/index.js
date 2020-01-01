@@ -35,12 +35,17 @@ export default () => {
             <AttendanceContext.Consumer>
               {attendance => (
                 <RaiderContext.Consumer>
-                  {raiders => (
-                    <AttendanceSummary
-                      attendance={attendance}
-                      raiders={raiders}
-                    />
-                  )}
+                  {raiders => {
+                    if (attendance.error) {
+                      return <h3>{attendance.error}</h3>;
+                    }
+                    return (
+                      <AttendanceSummary
+                        attendance={attendance}
+                        raiders={raiders}
+                      />
+                    );
+                  }}
                 </RaiderContext.Consumer>
               )}
             </AttendanceContext.Consumer>
