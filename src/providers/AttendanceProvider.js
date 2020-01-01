@@ -59,16 +59,17 @@ const AttendanceProvider = props => {
         setAttendance(parseAttendance(rawAttendance));
       })
       .catch(err => {
+        // Retry until successful
         console.error(err);
         setAttendance({
           error: "Error fetching attendance. Trying again every 5 seconds.",
         });
-
         setTimeout(fetchAttendance, 5000);
       });
   }
 
   useEffect(fetchAttendance, []);
+  // Use static data until fetch completes successfully
   return (
     <StaticAttendanceProvider>
       <StaticAttendanceContext.Consumer>
