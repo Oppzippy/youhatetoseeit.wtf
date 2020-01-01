@@ -8,7 +8,7 @@ function parseEntry(entry) {
   return {
     name,
     realm,
-    status,
+    status: parseInt(status),
     zone,
   };
 }
@@ -40,14 +40,16 @@ function transformPlayerInfo(players, { start, afterBreak }) {
     const playerAfterBreak = afterBreak.players.find(
       p => p.name === name && p.realm === realm
     );
+    // offlineExplicit means they were explicitly set to offline rather than being offline
+    // because they were excluded from the list
     return {
       name: name,
       realm: realm,
-      online: !!playerFromStart || !!playerAfterBreak,
+      online: playerFromStart?.status >= 1 || playerAfterBreak?.status >= 1,
+      offlineExplicit:
+        playerFromStart?.status === 0 || playerAfterBreak?.status === 0,
       tardy: !playerFromStart,
-      benched:
-        (playerFromStart && playerFromStart.status === "2") ||
-        (playerAfterBreak && playerAfterBreak.status === "2"),
+      benched: playerFromStart?.status === 2 || playerAfterBreak?.status === 2,
     };
   });
 
@@ -63,7 +65,11 @@ function parseAttendance(snapshots) {
   const attendance = snapshots.map(snapshot => {
     const newSnapshot = transformPlayerInfo(players, snapshot);
     newSnapshot.players = newSnapshot.players.map(player => {
-      if (!player.online && !seenPlayers.has(playerSerializer(player))) {
+      if (
+        !player.online &&
+        !player.offlineExplicit &&
+        !seenPlayers.has(playerSerializer(player))
+      ) {
         return {
           ...player,
           ignore: true,
@@ -71,10 +77,11 @@ function parseAttendance(snapshots) {
       }
       return player;
     });
-    newSnapshot.players.forEach(player => {
-      if (player.online) {
-        seenPlayers.add(playerSerializer(player));
-      }
+    snapshot.start.players.forEach(player => {
+      seenPlayers.add(playerSerializer(player));
+    });
+    snapshot.afterBreak.players.forEach(player => {
+      seenPlayers.add(playerSerializer(player));
     });
     return newSnapshot;
   });
