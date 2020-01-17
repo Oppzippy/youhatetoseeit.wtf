@@ -112,7 +112,7 @@ class RaiderListing extends React.Component {
             meta.twitch &&
             liveStreamers.has(meta.twitch.toLowerCase())
           ) {
-            return <LiveIndicator>Live</LiveIndicator>;
+            return <LiveIndicator>Live Now</LiveIndicator>;
           }
         }}
       </StreamerConsumer>
