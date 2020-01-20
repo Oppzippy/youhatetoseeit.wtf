@@ -60,4 +60,29 @@ function filterRaiders(attendance, raiders) {
   };
 }
 
-export { indexPlayers, mergeAlts, filterRaiders };
+function filterDate(attendance, startDate, endDate) {
+  const playerWhitelist = new Set();
+  const newSnapshots = attendance.snapshots.filter(snapshot => {
+    const { date } = snapshot;
+    if (startDate && date < startDate) {
+      return false;
+    }
+    if (endDate && date > endDate) {
+      return false;
+    }
+    snapshot.players.forEach(player =>
+      playerWhitelist.add(playerSerializer(player))
+    );
+    return true;
+  });
+  const newPlayers = attendance.players.filter(p =>
+    playerWhitelist.has(playerSerializer(p))
+  );
+  return {
+    ...attendance,
+    players: newPlayers,
+    snapshots: newSnapshots,
+  };
+}
+
+export { indexPlayers, mergeAlts, filterRaiders, filterDate };

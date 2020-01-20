@@ -7,7 +7,7 @@ import {
   AttendanceProvider,
   AttendanceContext,
 } from "providers/AttendanceProvider";
-import { filterRaiders } from "helpers/AttendanceHelpers";
+import { filterRaiders, filterDate } from "helpers/AttendanceHelpers";
 // Components
 import AttendanceTable from "components/attendance/AttendanceTable";
 import ColumnLayout from "components/layouts/Columns";
@@ -16,6 +16,8 @@ import "components/Layout.css";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const nav = [
     {
       text: "Summary",
@@ -51,16 +53,41 @@ export default props => {
                         raiders
                       );
                     }
+                    filteredAttendance = filterDate(
+                      filteredAttendance,
+                      startDate ? new Date(startDate) : null,
+                      endDate ? new Date(endDate) : null
+                    );
                     return (
                       <div>
                         <div>
-                          <Label htmlFor="raiders-only">Raiders Only</Label>
-                          <input
-                            type="checkbox"
-                            id="raiders-only"
-                            checked={isRaidersOnly}
-                            onChange={() => setRaidersOnly(!isRaidersOnly)}
-                          />
+                          <div>
+                            <Label htmlFor="raiders-only">Raiders Only</Label>
+                            <input
+                              type="checkbox"
+                              id="raiders-only"
+                              value={isRaidersOnly}
+                              onChange={() => setRaidersOnly(!isRaidersOnly)}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="start-date">Start Date</Label>
+                            <input
+                              type="date"
+                              id="start-date"
+                              value={startDate ?? ""}
+                              onChange={e => setStartDate(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="end-date">End Date</Label>
+                            <input
+                              type="date"
+                              id="end-date"
+                              value={endDate ?? ""}
+                              onChange={e => setEndDate(e.target.value)}
+                            />
+                          </div>
                         </div>
                         <AttendanceTable attendance={filteredAttendance} />
                       </div>
