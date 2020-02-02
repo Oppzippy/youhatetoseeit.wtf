@@ -8,7 +8,6 @@ import {
   TopLeftHeader,
 } from "./AttendanceTableLayout";
 import AttendanceBox from "components/attendance/AttendanceBox";
-import RaidTierSelector from "./RaidTierSelector";
 
 function createDateHeader(dates) {
   const dateOptions = {

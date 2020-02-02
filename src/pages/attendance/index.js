@@ -9,7 +9,7 @@ import {
 } from "providers/AttendanceProvider";
 // Components
 import AttendanceSummary from "components/attendance/AttendanceSummary";
-import ColumnLayout from "components/layouts/Columns";
+import ColumnLayout from "../../components/layouts/Columns";
 import "components/Layout.css";
 
 export default () => {
@@ -33,15 +33,15 @@ export default () => {
         <AttendanceProvider>
           <RaiderProvider>
             <AttendanceContext.Consumer>
-              {attendance => (
+              {attendanceTracker => (
                 <RaiderContext.Consumer>
                   {raiders => {
-                    if (attendance.error) {
-                      return <h3>{attendance.error}</h3>;
+                    if (attendanceTracker.error) {
+                      return <h3>{attendanceTracker.error}</h3>;
                     }
                     return (
                       <AttendanceSummary
-                        attendance={attendance}
+                        attendanceTracker={attendanceTracker}
                         raiders={raiders}
                       />
                     );

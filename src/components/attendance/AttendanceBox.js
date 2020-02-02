@@ -33,7 +33,7 @@ const AttendanceElement = styled.div.attrs(props => ({
 
 const AttendanceBox = props => {
   const { player, playerAttendance, date } = props;
-  const status = playerAttendance.getAggregate();
+  const status = playerAttendance.getSummary();
   let title = `${date.toLocaleDateString()}\n${player.name}\n${
     statusText[status]
   }`;

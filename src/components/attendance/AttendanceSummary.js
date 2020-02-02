@@ -1,24 +1,37 @@
 // Libraries
 import React, { useState } from "react";
 // Components
-import AttendanceSummaryTable from "components/attendance/AttendanceSummaryTable";
-import Label from "components/styles/Label";
+import AttendanceSummaryTable from "./AttendanceSummaryTable";
+import RaidTierSelector from "./RaidTierSelector";
+import Label from "../styles/Label";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);
-  let { attendanceTracker, raiders } = props;
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const { attendanceTracker, raiders } = props;
+  attendanceTracker.setStartDate(startDate);
+  attendanceTracker.setEndDate(endDate);
+
   return (
     <div>
-      <Label htmlFor="raiders-only">Raiders Only</Label>
-      <input
-        type="checkbox"
-        id="raiders-only"
-        checked={isRaidersOnly}
-        onChange={() => setRaidersOnly(!isRaidersOnly)}
-      />
+      <div>
+        <Label htmlFor="raiders-only">Raiders Only</Label>
+        <input
+          type="checkbox"
+          id="raiders-only"
+          checked={isRaidersOnly}
+          onChange={() => setRaidersOnly(!isRaidersOnly)}
+        />
+      </div>
+      <div>
+        <RaidTierSelector setStartDate={setStartDate} setEndDate={setEndDate} />
+      </div>
       <AttendanceSummaryTable
-        attendance={attendanceTracker}
-        whitelist={isRaidersOnly ? raiders : null}
+        attendanceTracker={attendanceTracker}
+        whitelist={
+          isRaidersOnly ? raiders.map(raider => raider.character) : null
+        }
       />
     </div>
   );

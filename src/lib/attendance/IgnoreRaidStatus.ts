@@ -2,7 +2,7 @@ import AttendanceSummary from "./AttendanceSummary";
 import PlayerRaidStatus from "./PlayerRaidStatus";
 
 class IgnoreRaidStatus implements PlayerRaidStatus {
-  public getAggregate(): AttendanceSummary {
+  public getSummary(): AttendanceSummary {
     return AttendanceSummary.IGNORE;
   }
 }

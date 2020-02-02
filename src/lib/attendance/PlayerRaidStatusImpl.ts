@@ -10,7 +10,7 @@ class PlayerRaidStatusImpl implements PlayerRaidStatus {
     this.breakStatus = breakStatus;
   }
 
-  public getAggregate(): AttendanceSummary {
+  public getSummary(): AttendanceSummary {
     const startStatus = this.startStatus;
     const breakStatus = this.breakStatus;
     if (!startStatus && !breakStatus) {
