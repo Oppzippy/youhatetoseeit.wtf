@@ -1,25 +1,23 @@
 // Libraries
 import React from "react";
 import styled from "styled-components";
+import AttendanceSummary from "../../lib/attendance/AttendanceSummary";
 
-const colors = {
-  "-1": "#666",
-  0: "#F00",
-  1: "#00CC00",
-  2: "#FF0",
-  3: "#F60",
-  4: "#BFFF90",
-};
+const colors = {};
+colors[AttendanceSummary.IGNORE] = "#666";
+colors[AttendanceSummary.ABSENT] = "#F00";
+colors[AttendanceSummary.PRESENT] = "#0C0";
+colors[AttendanceSummary.NOT_IN_GROUP] = "#FF0";
+colors[AttendanceSummary.ARRIVED_LATE] = "#F60";
+colors[AttendanceSummary.LEFT_EARLY] = "#F60";
 
-const statusText = {
-  // TODO dont hardcode
-  "-1": "Didn't join yet",
-  0: "Absent",
-  1: "Present",
-  2: "Benched",
-  3: "Tardy",
-  4: "Not Zoned In",
-};
+const statusText = {};
+statusText[AttendanceSummary.IGNORE] = "Didn't join yet";
+statusText[AttendanceSummary.ABSENT] = "Absent";
+statusText[AttendanceSummary.PRESENT] = "Present";
+statusText[AttendanceSummary.NOT_IN_GROUP] = "Not in group";
+statusText[AttendanceSummary.ARRIVED_LATE] = "Tardy";
+statusText[AttendanceSummary.LEFT_EARLY] = "Left Early";
 
 const AttendanceElement = styled.div.attrs(props => ({
   style: {
@@ -33,34 +31,13 @@ const AttendanceElement = styled.div.attrs(props => ({
   border: 1px solid black;
 `;
 
-function getStatusId(player) {
-  const { online, tardy, benched, ignore } = player;
-  if (ignore) {
-    return -1;
-  }
-  if (online) {
-    if (benched) {
-      return 2;
-    }
-    if (tardy) {
-      return 3;
-    }
-    return 1;
-  }
-  return 0;
-}
-
 const AttendanceBox = props => {
-  const { player, snapshot } = props;
-  const status = getStatusId(player);
-
-  let title = `${snapshot.date.toLocaleDateString()}\n${player.name}\n${
+  const { player, playerAttendance, date } = props;
+  const status = playerAttendance.getSummary();
+  let title = `${date.toLocaleDateString()}\n${player.name}\n${
     statusText[status]
   }`;
 
-  if (player.zone) {
-    title += `\n${player.zone}`;
-  }
   return (
     <AttendanceElement
       status={status}

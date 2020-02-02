@@ -1,14 +1,12 @@
 // Libraries
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
-// Helpers
-import {
-  parseAttendance,
-  parseAttendanceString,
-} from "parsers/AttendanceParser";
-import { mergeAlts } from "helpers/AttendanceHelpers";
+import AttendanceSnapshotParser from "../lib/attendance/AttendanceSnapshotParser";
+import RaidAttendance from "../lib/attendance/RaidAttendance";
+import AttendanceTracker from "../lib/attendance/AttendanceTracker";
+import AltTracker from "../lib/attendance/AltTracker";
 
-const StaticAttendanceContext = React.createContext();
+const StaticAttendanceContext = React.createContext(null);
 
 const StaticAttendanceProvider = props => {
   const data = useStaticQuery(graphql`
@@ -54,16 +52,18 @@ const StaticAttendanceProvider = props => {
       },
     };
   });
-  const attendanceStrings = data.allCockpitAttendance.nodes.map(node => ({
-    start: node.start.value,
-    afterBreak: node.afterBreak.value,
-  }));
-  const rawAttendance = attendanceStrings
-    .map(parseAttendanceString)
-    .map(mergeAlts(altPairs));
-  const attendance = parseAttendance(rawAttendance);
+  const attendance = data.allCockpitAttendance.nodes.map(
+    node =>
+      new RaidAttendance(
+        new AttendanceSnapshotParser(node.start.value).parse(),
+        new AttendanceSnapshotParser(node.afterBreak.value).parse()
+      )
+  );
+  const attendanceTracker = new AttendanceTracker(attendance);
+  attendanceTracker.setAltTracker(new AltTracker(altPairs));
+
   return (
-    <StaticAttendanceContext.Provider value={attendance}>
+    <StaticAttendanceContext.Provider value={attendanceTracker}>
       {props.children}
     </StaticAttendanceContext.Provider>
   );

@@ -3,15 +3,14 @@ import React, { useState, useEffect } from "react";
 import { graphql, useStaticQuery } from "gatsby";
 // Helpers
 import Cockpit from "cockpit/Cockpit";
-import {
-  parseAttendance,
-  parseAttendanceString,
-} from "parsers/AttendanceParser";
-import { mergeAlts } from "helpers/AttendanceHelpers";
+import AttendanceSnapshotParser from "../lib/attendance/AttendanceSnapshotParser";
+import RaidAttendance from "../lib/attendance/RaidAttendance";
+import AttendanceTracker from "../lib/attendance/AttendanceTracker";
 import {
   StaticAttendanceProvider,
   StaticAttendanceContext,
 } from "providers/StaticAttendanceProvider";
+import AltTracker from "../lib/attendance/AltTracker";
 
 const AttendanceContext = React.createContext();
 
@@ -52,11 +51,16 @@ const AttendanceProvider = props => {
             realm: entry.altRealm,
           },
         }));
-        const attendanceStrings = attendance.entries;
-        const rawAttendance = attendanceStrings
-          .map(parseAttendanceString)
-          .map(mergeAlts(altPairs));
-        setAttendance(parseAttendance(rawAttendance));
+        const raids = attendance.entries.map(
+          ({ start, afterBreak }) =>
+            new RaidAttendance(
+              new AttendanceSnapshotParser(start).parse(),
+              new AttendanceSnapshotParser(afterBreak).parse()
+            )
+        );
+        const attendanceTracker = new AttendanceTracker(raids);
+        attendanceTracker.setAltTracker(new AltTracker(altPairs));
+        setAttendance(attendanceTracker);
       })
       .catch(err => {
         // Retry until successful

@@ -1,15 +1,13 @@
-// Libraries
 import React, { useState } from "react";
-// Components
-import AttendanceSummaryTable from "./AttendanceSummaryTable";
-import RaidTierSelector from "./RaidTierSelector";
 import Label from "../styles/Label";
+import AttendanceTable from "./AttendanceTable";
+import RaidTierSelector from "./RaidTierSelector";
 
 export default props => {
+  const { attendanceTracker, raiders } = props;
   const [isRaidersOnly, setRaidersOnly] = useState(true);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const { attendanceTracker, raiders } = props;
   attendanceTracker.setStartDate(startDate);
   attendanceTracker.setEndDate(endDate);
 
@@ -27,11 +25,9 @@ export default props => {
       <div>
         <RaidTierSelector setStartDate={setStartDate} setEndDate={setEndDate} />
       </div>
-      <AttendanceSummaryTable
+      <AttendanceTable
         attendanceTracker={attendanceTracker}
-        whitelist={
-          isRaidersOnly ? raiders.map(raider => raider.character) : null
-        }
+        whitelist={isRaidersOnly ? raiders : null}
       />
     </div>
   );

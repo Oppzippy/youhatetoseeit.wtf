@@ -15,7 +15,6 @@ const Table = styled.div`
 const TopHeader = styled.div`
   grid-row: 1;
   background-color: inherit;
-  position: sticky;
   top: 0;
 `;
 
