@@ -32,15 +32,12 @@ const AttendanceElement = styled.div.attrs(props => ({
 `;
 
 const AttendanceBox = props => {
-  const { player, date } = props;
-  const status = player.getAggregate();
+  const { player, playerAttendance, date } = props;
+  const status = playerAttendance.getAggregate();
   let title = `${date.toLocaleDateString()}\n${player.name}\n${
     statusText[status]
   }`;
 
-  if (player.zone) {
-    title += `\n${player.zone}`;
-  }
   return (
     <AttendanceElement
       status={status}

@@ -8,6 +8,7 @@ import {
   TopLeftHeader,
 } from "./AttendanceTableLayout";
 import AttendanceBox from "components/attendance/AttendanceBox";
+import RaidTierSelector from "./RaidTierSelector";
 
 function createDateHeader(dates) {
   const dateOptions = {
@@ -36,7 +37,8 @@ function createAttendanceBoxes(attendanceTracker, players) {
         <AttendanceBox
           key={`${player.name}-${player.realm}-${playerIndex}-${raidIndex}`}
           date={raids[raidIndex].getDate()}
-          player={playerAttendance}
+          player={player}
+          playerAttendance={playerAttendance}
           column={raidIndex + 2}
           row={playerIndex + 2}
         />

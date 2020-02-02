@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import Label from "../styles/Label";
 import AttendanceTable from "./AttendanceTable";
+import RaidTierSelector from "./RaidTierSelector";
 
 export default props => {
-  console.log("a");
+  const { attendanceTracker, raiders } = props;
   const [isRaidersOnly, setRaidersOnly] = useState(true);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  attendanceTracker.setStartDate(startDate);
+  attendanceTracker.setEndDate(endDate);
+
   return (
     <div>
       <div>
@@ -16,9 +22,12 @@ export default props => {
           onChange={() => setRaidersOnly(!isRaidersOnly)}
         />
       </div>
+      <div>
+        <RaidTierSelector setStartDate={setStartDate} setEndDate={setEndDate} />
+      </div>
       <AttendanceTable
-        attendanceTracker={props.attendanceTracker}
-        whitelist={isRaidersOnly ? props.raiders : null}
+        attendanceTracker={attendanceTracker}
+        whitelist={isRaidersOnly ? raiders : null}
       />
     </div>
   );
