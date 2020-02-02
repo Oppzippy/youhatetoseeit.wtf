@@ -3,7 +3,7 @@ import Label from "../styles/Label";
 import AttendanceTable from "./AttendanceTable";
 
 export default props => {
-  console.log(props.attendanceTracker);
+  console.log("a");
   const [isRaidersOnly, setRaidersOnly] = useState(true);
   return (
     <div>
@@ -12,7 +12,7 @@ export default props => {
         <input
           type="checkbox"
           id="raiders-only"
-          value={isRaidersOnly}
+          checked={isRaidersOnly}
           onChange={() => setRaidersOnly(!isRaidersOnly)}
         />
       </div>

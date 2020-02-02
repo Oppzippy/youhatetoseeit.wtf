@@ -1,8 +1,7 @@
-import AttendanceStatus from "./AttendanceStatus";
+import AttendanceSummary from "./AttendanceSummary";
 
 interface PlayerRaidStatus {
-  startStatus: AttendanceStatus;
-  breakStatus: AttendanceStatus;
+  getAggregate(): AttendanceSummary;
 }
 
 export default PlayerRaidStatus;

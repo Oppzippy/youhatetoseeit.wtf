@@ -45,7 +45,7 @@ export default props => {
                       <div>
                         <AttendanceDetails
                           attendanceTracker={attendance}
-                          raiders={raiders}
+                          raiders={raiders.map(raider => raider.character)}
                         />
                       </div>
                     );

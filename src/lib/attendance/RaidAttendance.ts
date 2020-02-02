@@ -2,7 +2,7 @@ import uniqBy from "lodash/uniqBy";
 
 import AttendanceSnapshot from "./AttendanceSnapshot";
 import Player from "./Player";
-import PlayerRaidStatus from "./PlayerRaidStatus";
+import PlayerRaidStatusImpl from "./PlayerRaidStatusImpl";
 import PlayerSerializer from "./PlayerSerializer";
 
 class RaidAttendance {
@@ -33,7 +33,10 @@ class RaidAttendance {
     return players;
   }
 
-  public getPlayerStatus(player: Player, alts: Player[]): PlayerRaidStatus {
+  public getPlayerStatus(
+    player: Player,
+    alts: Player[] = []
+  ): PlayerRaidStatusImpl {
     const priority = [player, ...alts];
     const startPlayer = this.getPlayerInSnapshotByPriority(
       priority,
@@ -43,10 +46,10 @@ class RaidAttendance {
       priority,
       this.snapshotAtBreak
     );
-    return {
-      startStatus: startPlayer?.status,
-      breakStatus: breakPlayer?.status,
-    };
+    if (startPlayer || breakPlayer) {
+      return new PlayerRaidStatusImpl(startPlayer?.status, breakPlayer?.status);
+    }
+    return null;
   }
 
   private getPlayerInSnapshotByPriority(

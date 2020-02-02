@@ -3,8 +3,10 @@ import RaidAttendance from "./RaidAttendance";
 import PlayerSerializer from "./PlayerSerializer";
 import Player from "./Player";
 import AltTracker from "./AltTracker";
-import PlayerRaidStatus from "./PlayerRaidStatus";
+import PlayerRaidStatusImpl from "./PlayerRaidStatusImpl";
 import AttendanceStatus from "./AttendanceStatus";
+import PlayerRaidStatus from "./PlayerRaidStatus";
+import IgnoreRaidStatus from "./IgnoreRaidStatus";
 
 class AttendanceTracker {
   private raids: RaidAttendance[];
@@ -20,28 +22,32 @@ class AttendanceTracker {
     const playersWithDuplicates = this.raids
       .map(raid => raid.getPlayers())
       .flat()
-      .map(player => this.altTracker.getMain(player));
+      .map(player => this.altTracker?.getMain(player) ?? player);
     const players = uniqBy(playersWithDuplicates, (player: Player) => {
       return PlayerSerializer.serialize(player);
     });
     return players;
   }
 
-  public getAttendanceForPlayer(player: Player) {
+  public getAttendanceForPlayer(player: Player): PlayerRaidStatus[] {
     const raids = this.getRaids();
     let found = false;
     return raids.map(raid => {
       const status = raid.getPlayerStatus(
         player,
-        this.altTracker.getAlts(player)
+        this.altTracker?.getAlts(player) ?? []
       );
       if (status) {
         found = true;
       }
       if (found) {
-        return status;
+        const offline = {
+          isOnline: false,
+          isInGroup: false,
+        };
+        return status || new PlayerRaidStatusImpl(offline, offline);
       }
-      return false;
+      return new IgnoreRaidStatus();
     });
   }
 

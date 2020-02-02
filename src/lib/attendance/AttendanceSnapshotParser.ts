@@ -18,9 +18,9 @@ class AttendanceSnapshotParser {
     const [dateString, ...rawAttendance] = entries;
 
     const date = new Date(dateString);
-    const players = rawAttendance.map(attendance =>
-      this.parsePlayerEntry(attendance)
-    );
+    const players = rawAttendance
+      .filter(str => str.length > 0)
+      .map(attendance => this.parsePlayerEntry(attendance));
 
     return new AttendanceSnapshot(date, players);
   }

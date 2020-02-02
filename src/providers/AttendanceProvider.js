@@ -10,6 +10,7 @@ import {
   StaticAttendanceProvider,
   StaticAttendanceContext,
 } from "providers/StaticAttendanceProvider";
+import AltTracker from "../lib/attendance/AltTracker";
 
 const AttendanceContext = React.createContext();
 
@@ -58,7 +59,7 @@ const AttendanceProvider = props => {
             )
         );
         const attendanceTracker = new AttendanceTracker(raids);
-        attendanceTracker.setAltPairs(altPairs);
+        attendanceTracker.setAltTracker(new AltTracker(altPairs));
         setAttendance(attendanceTracker);
       })
       .catch(err => {
