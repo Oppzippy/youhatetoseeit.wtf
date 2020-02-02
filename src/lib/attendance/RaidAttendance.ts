@@ -35,17 +35,17 @@ class RaidAttendance {
 
   public getPlayerStatus(player: Player, alts: Player[]): PlayerRaidStatus {
     const priority = [player, ...alts];
-    const { status: startStatus } = this.getPlayerInSnapshotByPriority(
+    const startPlayer = this.getPlayerInSnapshotByPriority(
       priority,
       this.snapshotAtStart
     );
-    const { status: breakStatus } = this.getPlayerInSnapshotByPriority(
+    const breakPlayer = this.getPlayerInSnapshotByPriority(
       priority,
       this.snapshotAtBreak
     );
     return {
-      startStatus,
-      breakStatus,
+      startStatus: startPlayer?.status,
+      breakStatus: breakPlayer?.status,
     };
   }
 
@@ -59,6 +59,7 @@ class RaidAttendance {
         return playerAttendance;
       }
     }
+    return null;
   }
 }
 

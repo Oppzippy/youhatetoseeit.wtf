@@ -16,8 +16,9 @@ class AttendanceSnapshot {
   private mapPlayerAttendance() {
     this.playerAttendanceMap = new Map();
     this.playerAttendances.forEach(playerAttendance => {
-      const serializer = new PlayerSerializer(playerAttendance.player);
-      const serializedName = serializer.serialize();
+      const serializedName = PlayerSerializer.serialize(
+        playerAttendance.player
+      );
       this.playerAttendanceMap.set(serializedName, playerAttendance);
     });
   }
@@ -29,8 +30,7 @@ class AttendanceSnapshot {
   }
 
   public getPlayer(player: Player): PlayerAttendance {
-    const serializer = new PlayerSerializer(player);
-    return this.playerAttendanceMap.get(serializer.serialize());
+    return this.playerAttendanceMap.get(PlayerSerializer.serialize(player));
   }
 
   public getDate(): Date {

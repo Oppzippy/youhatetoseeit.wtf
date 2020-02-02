@@ -30,7 +30,6 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-typescript`,
-      options: {},
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,

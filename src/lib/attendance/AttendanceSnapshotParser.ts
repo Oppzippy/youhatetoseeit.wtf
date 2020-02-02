@@ -18,7 +18,9 @@ class AttendanceSnapshotParser {
     const [dateString, ...rawAttendance] = entries;
 
     const date = new Date(dateString);
-    const players = rawAttendance.map(this.parsePlayerEntry);
+    const players = rawAttendance.map(attendance =>
+      this.parsePlayerEntry(attendance)
+    );
 
     return new AttendanceSnapshot(date, players);
   }
@@ -46,3 +48,5 @@ class AttendanceSnapshotParser {
     };
   }
 }
+
+export default AttendanceSnapshotParser;

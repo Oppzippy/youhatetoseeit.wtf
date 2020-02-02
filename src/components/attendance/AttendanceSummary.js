@@ -1,17 +1,12 @@
 // Libraries
 import React, { useState } from "react";
-// Helpers
-import { filterRaiders } from "helpers/AttendanceHelpers";
 // Components
 import AttendanceSummaryTable from "components/attendance/AttendanceSummaryTable";
 import Label from "components/styles/Label";
 
 export default props => {
   const [isRaidersOnly, setRaidersOnly] = useState(true);
-  let { attendance, raiders } = props;
-  if (isRaidersOnly) {
-    attendance = filterRaiders(attendance, raiders);
-  }
+  let { attendanceTracker, raiders } = props;
   return (
     <div>
       <Label htmlFor="raiders-only">Raiders Only</Label>
@@ -21,7 +16,10 @@ export default props => {
         checked={isRaidersOnly}
         onChange={() => setRaidersOnly(!isRaidersOnly)}
       />
-      <AttendanceSummaryTable attendance={attendance} />
+      <AttendanceSummaryTable
+        attendance={attendanceTracker}
+        whitelist={isRaidersOnly ? raiders : null}
+      />
     </div>
   );
 };

@@ -3,6 +3,8 @@ import RaidAttendance from "./RaidAttendance";
 import PlayerSerializer from "./PlayerSerializer";
 import Player from "./Player";
 import AltTracker from "./AltTracker";
+import PlayerRaidStatus from "./PlayerRaidStatus";
+import AttendanceStatus from "./AttendanceStatus";
 
 class AttendanceTracker {
   private raids: RaidAttendance[];
@@ -39,6 +41,7 @@ class AttendanceTracker {
       if (found) {
         return status;
       }
+      return false;
     });
   }
 
@@ -73,4 +76,10 @@ class AttendanceTracker {
   public setEndDate(date: Date) {
     this.endDate = date;
   }
+
+  public setAltTracker(altTracker: AltTracker) {
+    this.altTracker = altTracker;
+  }
 }
+
+export default AttendanceTracker;

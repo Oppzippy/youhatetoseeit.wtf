@@ -1,8 +1,6 @@
 // Libraries
 import React, { useState } from "react";
 import styled from "styled-components";
-// Helpers
-import playerSerializer from "helpers/PlayerSerializer";
 // Components
 import ParseColor from "components/ParseColor";
 
@@ -12,7 +10,7 @@ function getStats(attendance, condition) {
   attendance.snapshots.forEach((snapshot, i) =>
     snapshot.players.forEach(player => {
       if (player.ignore) return;
-      const key = playerSerializer(player);
+      const key = player;
       let step = stepSizes.get(key);
       if (!step) {
         step = 1 / (attendance.snapshots.length - i);
@@ -116,13 +114,7 @@ export default props => {
           isSortingReversed
         ).map((player, i) => (
           <tr key={i}>
-            <td>
-              {
-                props.attendance.players.find(
-                  p => playerSerializer(p) === player
-                ).name
-              }
-            </td>
+            <td>{props.attendance.players.find(p => p === player).name}</td>
             <td>
               <ParseColor parse={showedUp.get(player)}>
                 {Math.round(showedUp.get(player) * 100)}%
