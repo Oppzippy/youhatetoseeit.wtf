@@ -4,11 +4,6 @@ import { graphql, useStaticQuery } from "gatsby";
 // Helpers
 import Cockpit from "cockpit/Cockpit";
 import {
-  parseAttendance,
-  parseAttendanceString,
-} from "parsers/AttendanceParser";
-import { mergeAlts } from "helpers/AttendanceHelpers";
-import {
   StaticAttendanceProvider,
   StaticAttendanceContext,
 } from "providers/StaticAttendanceProvider";
