@@ -7,7 +7,7 @@ const Table = styled.div`
   grid-template-columns: 10em repeat(${props => props.columns}, 50px);
   grid-row-gap: 2px;
   background-color: var(--bg-color-light-2);
-  overflow: auto;
+  overflow-x: auto;
   width: 100%;
   height: 100%;
 `;
@@ -15,7 +15,6 @@ const Table = styled.div`
 const TopHeader = styled.div`
   grid-row: 1;
   background-color: inherit;
-  top: 0;
 `;
 
 const LeftHeader = styled.div`
@@ -23,6 +22,8 @@ const LeftHeader = styled.div`
   background-color: inherit;
   position: sticky;
   left: 0;
+  display: flex;
+  align-items: center;
 `;
 
 const TopLeftHeader = styled.div`
