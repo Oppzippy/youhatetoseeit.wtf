@@ -2,6 +2,7 @@
 import styled from "styled-components";
 
 const Table = styled.div`
+  margin: 1em 0;
   display: grid;
   grid-template-rows: 2em repeat(${props => props.rows}, 50px);
   grid-template-columns: 10em repeat(${props => props.columns}, 50px);
@@ -23,7 +24,9 @@ const LeftHeader = styled.div`
   position: sticky;
   left: 0;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: 1em;
 `;
 
 const TopLeftHeader = styled.div`
@@ -34,6 +37,9 @@ const TopLeftHeader = styled.div`
   position: sticky;
   left: 0;
   top: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1em;
 `;
 
 export { Table, TopHeader, LeftHeader, TopLeftHeader };
