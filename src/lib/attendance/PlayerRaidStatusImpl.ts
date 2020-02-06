@@ -31,6 +31,12 @@ class PlayerRaidStatusImpl implements PlayerRaidStatus {
       if (startStatus.isInGroup && breakStatus.isInGroup) {
         return AttendanceSummary.PRESENT;
       }
+      if (startStatus.isInGroup && !breakStatus.isInGroup) {
+        return AttendanceSummary.JOINED_GROUP_LATE;
+      }
+      if (!startStatus.isInGroup && breakStatus.isInGroup) {
+        return AttendanceSummary.LEFT_GROUP_EARLY;
+      }
       return AttendanceSummary.NOT_IN_GROUP;
     }
 

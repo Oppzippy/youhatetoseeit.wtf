@@ -10,6 +10,8 @@ colors[AttendanceSummary.PRESENT] = "#0C0";
 colors[AttendanceSummary.NOT_IN_GROUP] = "#FF0";
 colors[AttendanceSummary.ARRIVED_LATE] = "#F60";
 colors[AttendanceSummary.LEFT_EARLY] = "#F60";
+colors[AttendanceSummary.JOINED_GROUP_LATE] = "#FF0";
+colors[AttendanceSummary.LEFT_GROUP_EARLY] = "#FF0";
 
 const statusText = {};
 statusText[AttendanceSummary.IGNORE] = "Didn't join yet";
@@ -18,6 +20,8 @@ statusText[AttendanceSummary.PRESENT] = "Present";
 statusText[AttendanceSummary.NOT_IN_GROUP] = "Not in group";
 statusText[AttendanceSummary.ARRIVED_LATE] = "Tardy";
 statusText[AttendanceSummary.LEFT_EARLY] = "Left Early";
+statusText[AttendanceSummary.JOINED_GROUP_LATE] = "Joined Group Late";
+statusText[AttendanceSummary.LEFT_GROUP_EARLY] = "Left Group Early";
 
 const AttendanceElement = styled.div.attrs(props => ({
   style: {

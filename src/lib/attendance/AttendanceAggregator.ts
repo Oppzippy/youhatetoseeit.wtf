@@ -18,6 +18,9 @@ class AttendanceAggregator {
       AttendanceSummary.PRESENT,
       AttendanceSummary.ARRIVED_LATE,
       AttendanceSummary.LEFT_EARLY,
+      AttendanceSummary.JOINED_GROUP_LATE,
+      AttendanceSummary.LEFT_GROUP_EARLY,
+      AttendanceSummary.NOT_IN_GROUP,
     ]);
   }
 
@@ -30,7 +33,11 @@ class AttendanceAggregator {
   }
 
   public getNotInGroup() {
-    return this.getPercentage([AttendanceSummary.NOT_IN_GROUP]);
+    return this.getPercentage([
+      AttendanceSummary.NOT_IN_GROUP,
+      AttendanceSummary.LEFT_GROUP_EARLY,
+      AttendanceSummary.JOINED_GROUP_LATE,
+    ]);
   }
 
   private getPercentage(summary: AttendanceSummary[]) {

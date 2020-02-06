@@ -1,7 +1,7 @@
 import AttendanceSnapshot from "../AttendanceSnapshot";
 import RaidAttendance from "../RaidAttendance";
 import AttendanceTracker from "../AttendanceTracker";
-import PlayerRaidStatus from "../PlayerRaidStatusImpl";
+import AttendanceSummary from "../AttendanceSummary";
 
 function createRaidAttendance() {
   const p1 = {
@@ -135,7 +135,7 @@ describe("RaidAttendance", () => {
       name: "Warrior",
       realm: "Illidan",
     });
-    expect(attendance[0]).toBeFalsy();
+    expect(attendance[0].getSummary()).toEqual(AttendanceSummary.IGNORE);
     expect(attendance[1]).toBeTruthy();
   });
 
