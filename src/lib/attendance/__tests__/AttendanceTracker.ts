@@ -12,6 +12,10 @@ function createRaidAttendance() {
     name: "Priest",
     realm: "Illidan",
   };
+  const p3 = {
+    name: "Paladin",
+    realm: "Illidan",
+  };
   const snapshotAtStart = new AttendanceSnapshot(new Date(), [
     {
       player: p1,
@@ -27,6 +31,13 @@ function createRaidAttendance() {
         isInGroup: false,
       },
     },
+    {
+      player: p3,
+      status: {
+        isOnline: true,
+        isInGroup: true,
+      },
+    },
   ]);
   const snapshotAtBreak = new AttendanceSnapshot(new Date(), [
     {
@@ -40,6 +51,13 @@ function createRaidAttendance() {
       player: p2,
       status: {
         isOnline: false,
+        isInGroup: false,
+      },
+    },
+    {
+      player: p3,
+      status: {
+        isOnline: true,
         isInGroup: false,
       },
     },
@@ -105,7 +123,7 @@ function createAttendanceTracker() {
 describe("RaidAttendance", () => {
   it("has the correct players", () => {
     const tracker = createAttendanceTracker();
-    expect(tracker.getPlayers()).toHaveLength(3);
+    expect(tracker.getPlayers().length).toBeGreaterThan(2);
     expect(tracker.getPlayers()[0]?.name).toEqual("Hunter");
   });
 
@@ -137,6 +155,17 @@ describe("RaidAttendance", () => {
     });
     expect(attendance[0].getSummary()).toEqual(AttendanceSummary.IGNORE);
     expect(attendance[1]).toBeTruthy();
+  });
+
+  it("tracks left group early properly", () => {
+    const tracker = createAttendanceTracker();
+    const attendance = tracker.getAttendanceForPlayer({
+      name: "Paladin",
+      realm: "Illidan",
+    });
+    expect(attendance[0].getSummary()).toEqual(
+      AttendanceSummary.LEFT_GROUP_EARLY
+    );
   });
 
   //it("tracks players that haven't joined yet", () => {});
