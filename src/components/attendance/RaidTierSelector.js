@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Label from "../styles/Label";
 
 const raidTiers = [
@@ -17,12 +17,14 @@ const raidTiers = [
 export default props => {
   const [isInitialized, setInitialized] = useState(false);
   const { setStartDate, setEndDate } = props;
-  if (!isInitialized) {
-    setInitialized(true);
-    const { startDate, endDate } = raidTiers[0];
-    setStartDate(startDate);
-    setEndDate(endDate);
-  }
+  useEffect(() => {
+    if (!isInitialized) {
+      setInitialized(true);
+      const { startDate, endDate } = raidTiers[0];
+      setStartDate(startDate);
+      setEndDate(endDate);
+    }
+  }, [isInitialized, setInitialized, setStartDate, setEndDate]);
   return (
     <div>
       <Label htmlFor="raid-tier-select">Raid Tier</Label>
