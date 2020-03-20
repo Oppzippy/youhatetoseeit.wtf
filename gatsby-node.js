@@ -10,41 +10,54 @@ const config = require("./gatsby-config.js");
 const fs = require("fs");
 const SVGO = require("svgo");
 const crypto = require("crypto");
-const blizzardjs = require("blizzard.js");
+const BattleNetWrapper = require("battlenet-api-wrapper");
 const { createRemoteFileNode } = require("gatsby-source-filesystem");
 
 require("dotenv").config();
 
 const svgo = new SVGO();
 
-const blizzard = blizzardjs.initialize({
-  key: process.env.BLIZZARD_CLIENT_ID,
-  secret: process.env.BLIZZARD_CLIENT_SECRET,
-  origin: config.siteMetadata.guild.region,
-  locale: config.siteMetadata.guild.locale,
-});
+const battlenet = new BattleNetWrapper();
 
-const rendererUrl = `https://render-${config.siteMetadata.guild.region}.worldofwarcraft.com/character`;
+// {
+//   clientId: process.env.BLIZZARD_CLIENT_ID,
+//   clientSecret: process.env.BLIZZARD_CLIENT_SECRET,
+//   region: config.siteMetadata.guild.region,
+// }
 
 exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
+  await battlenet.init(
+    process.env.BLIZZARD_CLIENT_ID,
+    process.env.BLIZZARD_CLIENT_SECRET
+  );
   const { createNode, createNodeField } = actions;
   // Fetch all guild memberse
-  const token = await blizzard.getApplicationToken();
-  blizzard.defaults.token = token.data.access_token;
-  const guild = await blizzard.wow.guild("members", {
-    name: config.siteMetadata.guild.name,
-    realm: config.siteMetadata.guild.realm,
-  });
+  const guildInfo = config.siteMetadata.guild;
+  const guild = await battlenet.WowProfileData.getGuildRoster(
+    guildInfo.realm.toLowerCase(),
+    guildInfo.name.replace(/ /g, "-").toLowerCase()
+  );
   // Fetch guild member thumbnails
-  const promises = guild.data.members.map(async (member, i) => {
+  const promises = guild.members.map(async (member, i) => {
+    if (member.character.level < 120) {
+      return;
+    }
     const id = createNodeId(
-      `GuildMembers__${member.character.name}-${member.character.realm}`
+      `GuildMembers__${member.character.name}-${member.character.realm.slug}`
     );
 
     let thumbnailNode;
+    const oldConsoleLog = console.log;
+    // Blizzard js logs to console as well as throwing an exception.
+    // We don't want that spam
+    console.log = () => {};
     try {
+      const characterMedia = await battlenet.WowProfileData.getCharacterMedia(
+        member.character.realm.slug,
+        member.character.name.toLowerCase()
+      );
       thumbnailNode = await createRemoteFileNode({
-        url: `${rendererUrl}/${member.character.thumbnail}`,
+        url: characterMedia.bust_url,
         store,
         cache,
         createNode,
@@ -52,9 +65,10 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
       });
     } catch (err) {
       console.error(
-        `Error fetching ${member.character.name}-${member.character.realm}\n${err}`
+        `Error fetching ${member.character.name}-${member.character.realm.slug}\n${err}`
       );
     }
+    console.log = oldConsoleLog;
     const memberNodeInfo = {
       id: id,
       parent: null,
@@ -64,6 +78,11 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
       children: [],
       thumbnail___NODE: thumbnailNode ? thumbnailNode.id : null,
       ...member,
+      realm: member.character.realm.slug,
+      character: {
+        ...member.character,
+        class: member.character.playable_class.id,
+      },
     };
 
     memberNodeInfo.internal.contentDigest = crypto

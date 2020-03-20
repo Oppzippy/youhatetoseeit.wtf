@@ -20,6 +20,7 @@ const RaiderBox = styled.div`
     ),
     url(${props => props.thumbnail});
   background-size: cover;
+  background-position: center center;
   &::before {
     content: "";
     display: block;

@@ -25,7 +25,9 @@ const RaiderProvider = props => {
         nodes {
           character {
             name
-            realm
+            realm {
+              slug
+            }
             class
           }
           rank
@@ -55,6 +57,10 @@ const RaiderProvider = props => {
       const rank = ranksById[member.rank];
       return {
         ...member,
+        character: {
+          ...member.character,
+          realm: member.character.realm.slug,
+        },
         rankName: rank,
       };
     });
