@@ -48,7 +48,7 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
 
     let thumbnailNode;
     const oldConsoleLog = console.log;
-    // Blizzard js logs to console as well as throwing an exception.
+    // battlenet-api-wrapper logs to console as well as throwing an exception.
     // We don't want that spam
     console.log = () => {};
     try {
