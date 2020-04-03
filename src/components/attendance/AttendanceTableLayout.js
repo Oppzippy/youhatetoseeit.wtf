@@ -9,7 +9,7 @@ const Table = styled.div`
   grid-row-gap: 2px;
   background-color: var(--bg-color-light-2);
   overflow-x: auto;
-  width: 100%;
+  width: 80vw;
   height: 100%;
 `;
 
