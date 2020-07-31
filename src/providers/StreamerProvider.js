@@ -16,9 +16,10 @@ class StreamerProvider extends React.Component {
     // but it should be updated when props change
     this.state.streamers = this.props.streamers;
 
-    this.updateStreamers = this.updateStreamers.bind(this);
-    this.updater = setInterval(this.updateStreamers, 5 * 60 * 1000); // 5 min
-    this.updateStreamers();
+    // Disabled until we figure out what's going on with the twich api
+    // this.updateStreamers = this.updateStreamers.bind(this);
+    // this.updater = setInterval(this.updateStreamers, 5 * 60 * 1000); // 5 min
+    // this.updateStreamers();
   }
 
   componentWillUnmount() {
