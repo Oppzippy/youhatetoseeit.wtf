@@ -20,9 +20,9 @@ class AttendanceTracker {
 
   public getPlayers(): Player[] {
     const playersWithDuplicates = this.raids
-      .map(raid => raid.getPlayers())
+      .map((raid) => raid.getPlayers())
       .flat()
-      .map(player => this.altTracker?.getMain(player) ?? player);
+      .map((player) => this.altTracker?.getMain(player) ?? player);
     const players = uniqBy(playersWithDuplicates, (player: Player) => {
       return PlayerSerializer.serialize(player);
     });
@@ -32,12 +32,14 @@ class AttendanceTracker {
   public getAttendanceForPlayer(player: Player): PlayerRaidStatus[] {
     const raids = this.getRaids();
     let found = false;
-    return raids.map(raid => {
+    return raids.map((raid) => {
       const status = raid.getPlayerStatus(
         player,
         this.altTracker?.getAlts(player) ?? []
       );
-      if (status) {
+      if (status instanceof IgnoreRaidStatus) {
+        found = false;
+      } else if (status) {
         found = true;
       }
       if (found) {
@@ -56,7 +58,7 @@ class AttendanceTracker {
       return this.raids;
     }
 
-    return this.raids.filter(raid => {
+    return this.raids.filter((raid) => {
       if (this.startDate && this.startDate > raid.getDate()) {
         return false;
       }

@@ -19,8 +19,8 @@ class AttendanceSnapshotParser {
 
     const date = new Date(dateString);
     const players = rawAttendance
-      .filter(str => str.length > 0)
-      .map(attendance => this.parsePlayerEntry(attendance));
+      .filter((str) => str.length > 0)
+      .map((attendance) => this.parsePlayerEntry(attendance));
 
     return new AttendanceSnapshot(date, players);
   }
@@ -45,6 +45,7 @@ class AttendanceSnapshotParser {
     return {
       isOnline: status > 0,
       isInGroup: status == 1,
+      quitGuild: status === -1,
     };
   }
 }
