@@ -45,7 +45,7 @@ class AttendanceSnapshotParser {
     return {
       isOnline: status > 0,
       isInGroup: status == 1,
-      quitGuild: status === -1,
+      quitGuild: status == -1,
     };
   }
 }
