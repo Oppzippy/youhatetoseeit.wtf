@@ -47,28 +47,26 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
     );
 
     let thumbnailNode;
-    const oldConsoleLog = console.log;
-    // battlenet-api-wrapper logs to console as well as throwing an exception.
-    // We don't want that spam
-    console.log = () => {};
     try {
       const characterMedia = await battlenet.WowProfileData.getCharacterMedia(
         member.character.realm.slug,
         member.character.name.toLowerCase()
       );
-      thumbnailNode = await createRemoteFileNode({
-        url: characterMedia.bust_url,
-        store,
-        cache,
-        createNode,
-        createNodeId,
-      });
+      if (characterMedia?.assets) {
+        thumbnailNode = await createRemoteFileNode({
+          url: characterMedia.assets.find((asset) => asset.key === "inset")
+            .value,
+          store,
+          cache,
+          createNode,
+          createNodeId,
+        });
+      }
     } catch (err) {
       console.error(
         `Error fetching ${member.character.name}-${member.character.realm.slug}\n${err}`
       );
     }
-    console.log = oldConsoleLog;
     const memberNodeInfo = {
       id: id,
       parent: null,

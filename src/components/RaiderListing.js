@@ -18,7 +18,7 @@ const RaiderBox = styled.div`
       var(--bg-color-dark) -50%,
       transparent
     ),
-    url(${props => props.thumbnail});
+    url(${(props) => props.thumbnail});
   background-size: cover;
   background-position: center center;
   &::before {
@@ -39,7 +39,7 @@ const RaiderChild = styled.div`
 
 const Name = styled.div`
   font-weight: 600;
-  color: var(${props => `--class-color-${props.classId}`});
+  color: var(${(props) => `--class-color-${props.classId}`});
 `;
 
 const Rank = styled.div``;
@@ -84,7 +84,7 @@ class RaiderListing extends React.Component {
         href: `https://www.twitch.tv/${meta.twitch}`,
       });
     }
-    return links.map(link => {
+    return links.map((link) => {
       const icon = linkIcons[link.type];
       if (icon) {
         return (
@@ -126,7 +126,7 @@ class RaiderListing extends React.Component {
     const character = memberInfo.character;
     return (
       <div>
-        <RaiderBox thumbnail={memberInfo.thumbnail.publicURL}>
+        <RaiderBox thumbnail={memberInfo.thumbnail?.publicURL}>
           <RaiderChild>
             <Name>
               <ClassColor classId={character.class}>
