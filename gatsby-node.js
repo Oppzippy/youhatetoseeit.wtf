@@ -39,7 +39,7 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
   );
   // Fetch guild member thumbnails
   const promises = guild.members.map(async (member, i) => {
-    if (member.character.level < 120) {
+    if (member.character.level < 50) {
       return;
     }
     const id = createNodeId(
