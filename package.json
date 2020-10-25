@@ -4,6 +4,10 @@
   "description": "You Hate to See It guild website.",
   "version": "1.0.0",
   "author": "Kyle Scheuing",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "dependencies": {
     "@fika/gatsby-source-cockpit": "^1.1.2",
     "@types/jest": "^26.0.14",
