@@ -3,9 +3,14 @@ import Label from "../styles/Label";
 
 const raidTiers = [
   {
+    name: "Castle Nathria",
+    startDate: new Date("2020-11-25"),
+    // endDate: new Date(),
+  },
+  {
     name: "Ny'alotha, The Waking City",
     startDate: new Date("2020-01-21"),
-    // endDate: new Date()
+    endDate: new Date("2020-11-24"),
   },
   {
     name: "The Eternal Palace",
@@ -14,7 +19,7 @@ const raidTiers = [
   },
 ];
 
-export default props => {
+export default (props) => {
   const [isInitialized, setInitialized] = useState(false);
   const { setStartDate, setEndDate } = props;
   useEffect(() => {
@@ -30,7 +35,7 @@ export default props => {
       <Label htmlFor="raid-tier-select">Raid Tier</Label>
       <select
         id="raid-tier-select"
-        onChange={event => {
+        onChange={(event) => {
           const { startDate, endDate } = raidTiers[event.target.value];
           setStartDate(startDate);
           setEndDate(endDate);
