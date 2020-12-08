@@ -51,10 +51,10 @@ class Index extends React.Component {
     return (
       <>
         <Helmet>
-          <title>You Hate to See It</title>
+          <title>You Hate to See It | WoW Guild on Illidan US</title>
           <meta
             name="description"
-            content="World of Warcraft mythic raiding guild on Illidan-US"
+            content="You Hate to See It is a World of Warcraft mythic raiding guild on Illidan US. Apply now."
           />
         </Helmet>
         <StaticQuery
@@ -69,7 +69,7 @@ class Index extends React.Component {
               }
             }
           `}
-          render={data => {
+          render={(data) => {
             return (
               <FullscreenVideoBackground
                 src={data.cockpitApplyNow.background.value.publicURL}
@@ -80,7 +80,7 @@ class Index extends React.Component {
         <FullscreenContainer ref={this.fullscreenContainerRef}>
           <NavBar scrollFunctions={this.state.scrollFunctions} />
           <SnapContainer
-            setScrollFunctions={funcs =>
+            setScrollFunctions={(funcs) =>
               this.setState({ scrollFunctions: funcs })
             }
             parent={this.fullscreenContainerRef.current}
