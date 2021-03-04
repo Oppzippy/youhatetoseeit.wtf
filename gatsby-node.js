@@ -10,33 +10,28 @@ const config = require("./gatsby-config.js");
 const fs = require("fs");
 const SVGO = require("svgo");
 const crypto = require("crypto");
-const BattleNetWrapper = require("battlenet-api-wrapper");
+const blizzard = require("blizzard.js");
 const { createRemoteFileNode } = require("gatsby-source-filesystem");
 
 require("dotenv").config();
 
 const svgo = new SVGO();
 
-const battlenet = new BattleNetWrapper();
-
-// {
-//   clientId: process.env.BLIZZARD_CLIENT_ID,
-//   clientSecret: process.env.BLIZZARD_CLIENT_SECRET,
-//   region: config.siteMetadata.guild.region,
-// }
-
 exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
-  await battlenet.init(
-    process.env.BLIZZARD_CLIENT_ID,
-    process.env.BLIZZARD_CLIENT_SECRET
-  );
+  const wowClient = await blizzard.wow.createInstance({
+    key: process.env.BLIZZARD_CLIENT_ID,
+    secret: process.env.BLIZZARD_CLIENT_SECRET,
+    origin: config.siteMetadata.guild.region,
+    locale: config.siteMetadata.guild.locale,
+  });
   const { createNode, createNodeField } = actions;
   // Fetch all guild memberse
   const guildInfo = config.siteMetadata.guild;
-  const guild = await battlenet.WowProfileData.getGuildRoster(
-    guildInfo.realm.toLowerCase(),
-    guildInfo.name.replace(/ /g, "-").toLowerCase()
-  );
+  const { data: guild } = await wowClient.guild({
+    realm: guildInfo.realm.toLowerCase(),
+    name: guildInfo.name.replace(/ /g, "-").toLowerCase(),
+    resource: "roster",
+  });
   // Fetch guild member thumbnails
   const promises = guild.members.map(async (member, i) => {
     if (member.character.level < 50) {
@@ -48,10 +43,10 @@ exports.sourceNodes = async ({ actions, createNodeId, store, cache }) => {
 
     let thumbnailNode;
     try {
-      const characterMedia = await battlenet.WowProfileData.getCharacterMedia(
-        member.character.realm.slug,
-        member.character.name.toLowerCase()
-      );
+      const { data: characterMedia } = await wowClient.characterMedia({
+        realm: member.character.realm.slug,
+        name: member.character.name.toLowerCase(),
+      });
       if (characterMedia?.assets) {
         thumbnailNode = await createRemoteFileNode({
           url: characterMedia.assets.find((asset) => asset.key === "inset")
